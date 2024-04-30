@@ -5,14 +5,17 @@ import {useEffect, useRef, useState} from "react";
 const MainChat = () => {
     const [openEmoji, setOpenEmoji] = useState(false)
     const [emojiToText, setEmojiToText] = useState("")
+
     const endRef = useRef(null);
     useEffect(() =>{
         endRef.current?.scrollIntoView({behavior: "smooth"});
     },[]);
+
     const showEmoji = e => {
         setEmojiToText(prev => prev + e.emoji);
         setOpenEmoji(false)
     };
+
     return (
         <div className='mainChat'>
             <div className="topChat">

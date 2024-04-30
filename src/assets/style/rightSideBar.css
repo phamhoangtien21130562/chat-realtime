@@ -1,5 +1,7 @@
 .rightSideBar{
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 .rightSideBar .user{
     padding: 30px 20px;
@@ -26,6 +28,19 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow: auto;
+}
+.rightSideBar .info::-webkit-scrollbar {
+    width: 10px;
+}
+
+.rightSideBar .info::-webkit-scrollbar-thumb {
+    background-color: rgba(17, 25, 40, 0.5);
+    border-radius: 5px;
+}
+
+.rightSideBar .info::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 .rightSideBar .info .option .title{
     display: flex;
@@ -74,4 +89,23 @@
     object-fit: cover;
     padding: 10px;
     cursor: pointer;
+}
+.rightSideBar .info button{
+    padding: 15px;
+    background-color: rgba(197, 80, 3, 0.57);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+}
+.rightSideBar .info button:hover{
+    background-color: rgba(197, 80, 3, 0.77);
+}
+.rightSideBar .info .logOutBtn{
+    /*padding: 10px;*/
+    background-color: rgba(65, 208, 208, 0.6);
+}
+.rightSideBar .info .logOutBtn:hover{
+    background-color: rgba(65, 208, 208, 0.89);
+
 }

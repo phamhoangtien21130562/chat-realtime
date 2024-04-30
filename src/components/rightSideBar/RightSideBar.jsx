@@ -82,6 +82,7 @@ const RightSideBar = () => {
                     </div>
                 </div>
                 <button>Block User</button>
+                <button className="logOutBtn">Log out </button>
             </div>
         </div>
     )
