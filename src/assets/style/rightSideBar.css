@@ -1,3 +1,77 @@
 .rightSideBar{
     flex: 1;
 }
+.rightSideBar .user{
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    border-bottom: 1px solid #655d72 ;
+}
+.rightSideBar .user img{
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.rightSideBar .user h2{
+    margin: auto;
+}
+.rightSideBar .user p{
+    margin: auto;
+}
+.rightSideBar .info{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.rightSideBar .info .option .title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.rightSideBar .info .option .title img{
+    width: 10px;
+    height: 10px;
+    background-color: rgba(17, 25, 40, 0.3);
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.rightSideBar .info .option .photos{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+.rightSideBar .info .option .photos .photoItem{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.rightSideBar .info .option .photos .photoItem .photoDetail{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.rightSideBar .info .option .photos .photoItem .photoDetail img{
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+}
+.rightSideBar .info .option .photos .photoItem .photoDetail span{
+    font-size: 14px;
+    color: #bbb8b8;
+    font-weight: 200;
+}
+.rightSideBar .info .option .photos .photoItem .downloadIcon{
+    width: 10px;
+    height: 10px;
+    background-color: rgba(17, 25, 40, 0.3);
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 10px;
+    cursor: pointer;
+}
