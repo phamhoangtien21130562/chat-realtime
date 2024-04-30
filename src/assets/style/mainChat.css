@@ -1,3 +1,5 @@
 .mainChat{
     flex: 2;
+    border-left: 1px solid #655d72;
+    border-right: 1px solid #655d72;
 }
