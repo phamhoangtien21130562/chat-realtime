@@ -1,0 +1,24 @@
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family:Arial,sans-serif;
+  background-image: url("../public/img/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: white;
+}
+.App {
+  height: 90vh;
+  width: 90vw;
+  background-color: rgba(27, 17, 48, 0.46);
+  border-radius: 12px;
+  backdrop-filter: blur(0px) saturate(180%);
+  border: 5px solid rgba(255, 255, 255, 0.13);
+  display: flex;
+}
