@@ -24,7 +24,7 @@ const LoginForm = () => {
               {/* Đăng ký button */}
               <button type="button" onClick={() => { window.location.href='register.jsx'; }}>Đăng Ký</button>
               {/* Quên mật khẩu button */}
-              <button type="button" onClick={() => { window.location.href='forgot_pass.jsx'; }}>Quên Mật Khẩu</button>
+              <button type="button" onClick={() => { window.location.href='forgot_password.html'; }}>Quên Mật Khẩu</button>
             </div>
             <input id="submit" type="submit" name="submit" value="Gửi" />
           </div>
