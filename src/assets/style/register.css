@@ -19,7 +19,7 @@ body {
     grid-column: 6/9;
     grid-row: 3;
     height: 470px;
-    width: 292px;
+    width: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -36,6 +36,7 @@ i.fab.fa-app-store-ios {
     display: block;
     margin-bottom: 50px;
     font-size: 28px;
+    text-align: center;
 }
 
 label {
@@ -44,17 +45,17 @@ label {
     font-weight: lighter;
 
 }
-input{
-    display: block;
-    border-bottom: 2px solid #00BCD4;
-    margin-top: 6px;
-    margin-bottom: 10px;
-    outline-style: none;
-}
-input[type="text"] {
-    padding: 5px;
-    width: 70%;
-}
+/*input{*/
+/*    display: block;*/
+/*    border-bottom: 2px solid #00BCD4;*/
+/*    margin-top: 6px;*/
+/*    margin-bottom: 10px;*/
+/*    outline-style: none;*/
+/*}*/
+/*input[type="text"] {*/
+/*    padding: 5px;*/
+/*    width: 70%;*/
+/*}*/
 
 input#submit {
     padding: 7px;
@@ -70,3 +71,58 @@ input#submit:hover{
 
     background: linear-gradient(to right, #fc466b, #3f5efb); 
 }
+.register_form{
+    margin: 10px auto ;
+    width: 400px;
+}
+.register_form h2{
+    text-align: center;
+}
+.username_Input, .pass_Input{
+    /*display: flex;*/
+}
+.username_Input label, .pass_Input label{
+    font-family: Arial;
+}
+input{
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: 95%;
+}
+input[type="text"]{
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: 95%;
+}
+input#submit{
+    color: white;
+    font-size: 15px;
+    padding: 15px;
+    width: 80%;
+    bottom: auto;
+}
+.login_ref{
+    margin-top: 75px;
+}
+.login_ref p a {
+    text-decoration: none;
+    color: #2111fa;
+}
+.label_username, .label_pass{
+    display: flex;
+}
+.label_username p, .label_pass p{
+    color: red;
+    margin-left: 10px;
+}
+.alert{
+    width: 75%;
+    background-color: #37d9af;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    border-radius: 10px;
+}
+
