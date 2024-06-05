@@ -103,8 +103,6 @@ const RegisterForm = () => {
                 {notification && (
                     <div className="alert">{notification}</div>
                 )}
-
-
             </div>
         </div>
     );
