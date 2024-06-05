@@ -68,7 +68,12 @@ const RegisterForm = () => {
                     <h2>Đăng ký tài khoản</h2>
                     <i className="fab fa-app-store-ios"></i>
                     <div className="username_Input">
-                        <label style={{marginLeft: '0px'}}> Username:</label>
+                        <div className="label_username">
+                            <label style={{marginLeft: '0px'}}> Username:</label>
+                            {usernameTouched && username.trim() === '' && (
+                                <p className="text-danger noti">Vui lòng nhập tên đăng nhập</p>
+                            )}
+                        </div>
                         <input value={username}
                                placeholder="Tên đăng nhập"
                                type="text"
@@ -77,7 +82,12 @@ const RegisterForm = () => {
                                name="hoten"/>
                     </div>
                     <div className="pass_Input">
-                        <label style={{marginLeft: '0px'}}> Password:</label>
+                        <div className="label_pass">
+                            <label style={{marginLeft: '0px'}}> Password:</label>
+                            {passwordTouched && password.trim() === '' && (
+                                <p className="text-danger noti">Vui lòng nhập mật khẩu</p>
+                            )}
+                        </div>
                         <input value={password}
                                type="password"
                                placeholder="Mật khẩu"
@@ -90,6 +100,9 @@ const RegisterForm = () => {
                         <p>Bạn đã có tài khoản?<a href="/" className="">Đăng nhập!</a></p>
                     </div>
                 </form>
+                {notification && (
+                    <div className="alert">{notification}</div>
+                )}
 
 
             </div>
