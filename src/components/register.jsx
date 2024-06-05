@@ -8,6 +8,7 @@ const RegisterForm = () => {
     const [usernameTouched, setUsernameTouched] = useState(false);
     const [passwordTouched, setPasswordTouched] = useState(false);
     const [notification, setNotification] = useState('');
+
     useEffect(() => {
         const newSocket = new WebSocket("ws://140.238.54.136:8080/chat/chat");
 
