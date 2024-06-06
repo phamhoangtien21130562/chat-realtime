@@ -24,7 +24,7 @@ const RegisterForm = () => {
     }, []);
 
     const handleRegister = () => {
-        // Gửi yêu cầu đăng nhập đến server WebSocket
+        // Gửi yêu cầu đăng kí đến server WebSocket
         const register = {
             action: "onchat", data: {
                 event: "REGISTER", data: {
@@ -35,7 +35,7 @@ const RegisterForm = () => {
         socket.send(JSON.stringify(register));
     };
 
-    // Sau khi đăng nhập thành công, set socket và lưu trữ thông tin đăng nhập
+
     useEffect(() => {
         if (socket) {
             socket.onmessage = (event) => {
