@@ -1,6 +1,6 @@
 import '../assets/style/profile.css'
 import React from "react";
-import Popup from "../components/popupPF";
+import Popup from "../infor/popupPF";
 
 
 
