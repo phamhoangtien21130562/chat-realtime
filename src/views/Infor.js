@@ -2,14 +2,12 @@ import '../assets/style/profile.css'
 import React from "react";
 import Popup from "../infor/popupPF";
 
-
-
-function profile(){
-  return(
+function profile() {
+    return (
         <header classname="profile">
-          <Popup />
-
+            <Popup/>
         </header>
-  );
+    );
 }
+
 export default profile;
