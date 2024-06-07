@@ -1,35 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import '../../assets/style/rightSideBar.css';
-import { useNavigate } from 'react-router-dom';
+import '../../assets/style/rightSideBar.css'
 
-const RightSideBar = ({ socket }) => {
-    const navigate = useNavigate();
-    const [logoutNotification, setLogoutNotification] = useState('');
 
-    const handleLogout = () => {
-        if (socket) {
-            const logoutData = {
-                action: "onchat",
-                data: {
-                    event: "LOGOUT"
-                }
-            };
-            socket.send(JSON.stringify(logoutData));
-        }
-
-        setLogoutNotification('Bạn đã đăng xuất thành công!');
-        navigate('/');
-    };
-
-    useEffect(() => {
-        if (logoutNotification !== '') {
-            const timeout = setTimeout(() => {
-                setLogoutNotification('');
-            }, 3000); // 3 seconds
-            return () => clearTimeout(timeout);
-        }
-    }, [logoutNotification]);
-
+const RightSideBar = () => {
     return(
         <div className='rightSideBar'>
             <div className="user">
@@ -110,14 +82,9 @@ const RightSideBar = ({ socket }) => {
                     </div>
                 </div>
                 <button>Block User</button>
-                <button onClick={handleLogout} className="logOutBtn">Log out</button>
-                {/* Logout notification */}
-                {logoutNotification && (
-                    <div className="logoutNotification">{logoutNotification}</div>
-                )}
+                <button className="logOutBtn">Log out </button>
             </div>
         </div>
-    );
-};
-
-export default RightSideBar;
+    )
+}
+export default RightSideBar
