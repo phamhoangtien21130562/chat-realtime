@@ -18,6 +18,7 @@ const RightSideBar = ({ socket }) => {
         }
 
         setLogoutNotification('Bạn đã đăng xuất thành công!');
+        {/* tro ve login */}
         navigate('/');
     };
 
@@ -29,6 +30,7 @@ const RightSideBar = ({ socket }) => {
             return () => clearTimeout(timeout);
         }
     }, [logoutNotification]);
+
 
     return(
         <div className='rightSideBar'>
@@ -111,7 +113,6 @@ const RightSideBar = ({ socket }) => {
                 </div>
                 <button>Block User</button>
                 <button onClick={handleLogout} className="logOutBtn">Log out</button>
-                {/* Logout notification */}
                 {logoutNotification && (
                     <div className="logoutNotification">{logoutNotification}</div>
                 )}
