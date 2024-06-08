@@ -69,7 +69,7 @@ input#submit {
 }
 input#submit:hover{
 
-    background: linear-gradient(to right, #fc466b, #3f5efb); 
+    background: linear-gradient(to right, #fc466b, #3f5efb);
 }
 .register_form{
     margin: 10px auto ;
@@ -125,4 +125,3 @@ input#submit{
     padding: 15px;
     border-radius: 10px;
 }
-

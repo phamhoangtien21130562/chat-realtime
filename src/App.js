@@ -1,6 +1,5 @@
-import logo from './logo.svg';
-import React from "react";
 
+import React from "react";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Login from "./components/login";
 import Register from "./components/register";
