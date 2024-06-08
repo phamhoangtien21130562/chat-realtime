@@ -44,17 +44,17 @@ label {
     font-weight: lighter;
 
 }
-input{
-    display: block;
-    border-bottom: 2px solid #00BCD4;
-    margin-top: 6px;
-    margin-bottom: 10px;
-    outline-style: none;
-}
-input[type="text"] {
-    padding: 5px;
-    width: 70%;
-}
+/*input{*/
+/*    display: block;*/
+/*    border-bottom: 2px solid #00BCD4;*/
+/*    margin-top: 6px;*/
+/*    margin-bottom: 10px;*/
+/*    outline-style: none;*/
+/*}*/
+/*input[type="text"] {*/
+/*    padding: 5px;*/
+/*    width: 70%;*/
+/*}*/
 
 input#submit {
     padding: 7px;
@@ -68,19 +68,19 @@ input#submit {
 }
 input#submit:hover{
 
-    background: linear-gradient(to right, #fc466b, #3f5efb); 
+    background: linear-gradient(to right, #fc466b, #3f5efb);
 }
-button {
-    padding: 10px 20px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff; /* Blue color */
-    color: #fff; /* White text */
-    font-size: 16px;
-    cursor: pointer;
-}
+/*button {*/
+/*    padding: 10px 20px;*/
+/*    margin-top: 10px;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    background-color: #007bff; !* Blue color *!*/
+/*    color: #fff; !* White text *!*/
+/*    font-size: 16px;*/
+/*    cursor: pointer;*/
+/*}*/
 
-button:hover {
-    background-color: #0056b3; /* Darker blue color on hover */
-}
+/*button:hover {*/
+/*    background-color: #0056b3; !* Darker blue color on hover *!*/
+/*}*/

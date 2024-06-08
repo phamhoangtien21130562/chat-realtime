@@ -75,6 +75,7 @@ const RegisterForm = () => {
                             )}
                         </div>
                         <input value={username}
+                               className="input_write input_type_text"
                                placeholder="Tên đăng nhập"
                                type="text"
                                onChange={(e) => setUsername(e.target.value)}
@@ -89,6 +90,7 @@ const RegisterForm = () => {
                             )}
                         </div>
                         <input value={password}
+                               className="input_write input_pass"
                                type="password"
                                placeholder="Mật khẩu"
                                onChange={(e) => setPassword(e.target.value)}
