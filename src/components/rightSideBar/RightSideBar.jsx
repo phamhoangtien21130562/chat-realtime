@@ -58,51 +58,51 @@ const RightSideBar = ({ socket }) => {
                         <img src="/img/arrowDown.png" alt=""/>
                     </div>
                     <div className="photos">
-                        <div className="photoItem">
-                            <div className="photoDetail">
-                                <img
-                                    src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2021/06/Subnautica-Sea-Dragon-1.jpg"
-                                    alt=""/>
-                                <span>PhotoName</span>
-                            </div>
-                            <img src="/img/download.png" alt="" className="downloadIcon"/>
-                        </div>
-                        <div className="photoItem">
-                            <div className="photoDetail">
-                                <img
-                                    src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2021/06/Subnautica-Sea-Dragon-1.jpg"
-                                    alt=""/>
-                                <span>PhotoName</span>
-                            </div>
-                            <img src="/img/download.png" alt="" className="downloadIcon"/>
-                        </div>
-                        <div className="photoItem">
-                            <div className="photoDetail">
-                                <img
-                                    src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2021/06/Subnautica-Sea-Dragon-1.jpg"
-                                    alt=""/>
-                                <span>PhotoName</span>
-                            </div>
-                            <img src="/img/download.png" alt="" className="downloadIcon"/>
-                        </div>
-                        <div className="photoItem">
-                            <div className="photoDetail">
-                                <img
-                                    src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2021/06/Subnautica-Sea-Dragon-1.jpg"
-                                    alt=""/>
-                                <span>PhotoName</span>
-                            </div>
-                            <img src="/img/download.png" alt="" className="downloadIcon"/>
-                        </div>
-                        <div className="photoItem">
-                            <div className="photoDetail">
-                                <img
-                                    src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2021/06/Subnautica-Sea-Dragon-1.jpg"
-                                    alt=""/>
-                                <span>PhotoName</span>
-                            </div>
-                            <img src="/img/download.png" alt="" className="downloadIcon"/>
-                        </div>
+                        {/*<div className="photoItem">*/}
+                        {/*    <div className="photoDetail">*/}
+                        {/*        <img*/}
+                        {/*            src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2021/06/Subnautica-Sea-Dragon-1.jpg"*/}
+                        {/*            alt=""/>*/}
+                        {/*        <span>PhotoName</span>*/}
+                        {/*    </div>*/}
+                        {/*    <img src="/img/download.png" alt="" className="downloadIcon"/>*/}
+                        {/*</div>*/}
+                        {/*<div className="photoItem">*/}
+                        {/*    <div className="photoDetail">*/}
+                        {/*        <img*/}
+                        {/*            src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2021/06/Subnautica-Sea-Dragon-1.jpg"*/}
+                        {/*            alt=""/>*/}
+                        {/*        <span>PhotoName</span>*/}
+                        {/*    </div>*/}
+                        {/*    <img src="/img/download.png" alt="" className="downloadIcon"/>*/}
+                        {/*</div>*/}
+                        {/*<div className="photoItem">*/}
+                        {/*    <div className="photoDetail">*/}
+                        {/*        <img*/}
+                        {/*            src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2021/06/Subnautica-Sea-Dragon-1.jpg"*/}
+                        {/*            alt=""/>*/}
+                        {/*        <span>PhotoName</span>*/}
+                        {/*    </div>*/}
+                        {/*    <img src="/img/download.png" alt="" className="downloadIcon"/>*/}
+                        {/*</div>*/}
+                        {/*<div className="photoItem">*/}
+                        {/*    <div className="photoDetail">*/}
+                        {/*        <img*/}
+                        {/*            src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2021/06/Subnautica-Sea-Dragon-1.jpg"*/}
+                        {/*            alt=""/>*/}
+                        {/*        <span>PhotoName</span>*/}
+                        {/*    </div>*/}
+                        {/*    <img src="/img/download.png" alt="" className="downloadIcon"/>*/}
+                        {/*</div>*/}
+                        {/*<div className="photoItem">*/}
+                        {/*    <div className="photoDetail">*/}
+                        {/*        <img*/}
+                        {/*            src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2021/06/Subnautica-Sea-Dragon-1.jpg"*/}
+                        {/*            alt=""/>*/}
+                        {/*        <span>PhotoName</span>*/}
+                        {/*    </div>*/}
+                        {/*    <img src="/img/download.png" alt="" className="downloadIcon"/>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
                 <div className="option">
