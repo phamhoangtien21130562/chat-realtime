@@ -9,6 +9,7 @@ const LoginForm = () => {
     const [usernameTouched, setUsernameTouched] = useState(false);
     const [passwordTouched, setPasswordTouched] = useState(false);
     const [notification, setNotification] = useState('');
+    const [loginSuccess, setLoginSuccess] = useState(false);
 
     const navigate = useNavigate();
 
@@ -37,14 +38,23 @@ const LoginForm = () => {
             },
         };
         socket.send(JSON.stringify(login));
+
     };
 
     useEffect(() => {
+        if (loginSuccess) {
+            // Lưu trữ thông tin đăng nhập vào localStorage
+            sessionStorage.setItem('username', username);
+            sessionStorage.setItem('password', password);
+        }
         if (socket) {
             socket.onmessage = (event) => {
                 const responseData = JSON.parse(event.data);
                 if (responseData && responseData.status === "success") {
+                    sessionStorage.setItem('re_login_code', responseData.data["RE_LOGIN_CODE"]);
                     setNotification('Đăng nhập thành công!');
+                    setLoginSuccess(true);
+
                     setTimeout(() => {
                         navigate('/homepage');
                     }, 1000);
@@ -54,7 +64,7 @@ const LoginForm = () => {
                 }
             };
         }
-    }, [socket]);
+    }, [socket, loginSuccess, username, password]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
