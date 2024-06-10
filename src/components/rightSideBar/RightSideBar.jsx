@@ -18,8 +18,9 @@ const RightSideBar = ({ socket }) => {
         }
 
         setLogoutNotification('Bạn đã đăng xuất thành công!');
-        {/* tro ve login */}
+        // {/* tro ve login */}
         navigate('/');
+        sessionStorage.clear();
     };
 
     useEffect(() => {
