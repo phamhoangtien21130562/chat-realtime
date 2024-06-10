@@ -84,13 +84,13 @@ input#submit:hover{
 .username_Input label, .pass_Input label{
     font-family: Arial;
 }
-input{
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    width: 95%;
-}
-input[type="text"]{
+/*input{*/
+/*    padding: 10px;*/
+/*    border-radius: 10px;*/
+/*    margin-bottom: 10px;*/
+/*    width: 95%;*/
+/*}*/
+.input_type_text{
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 20px;
@@ -102,6 +102,18 @@ input#submit{
     padding: 15px;
     width: 80%;
     bottom: auto;
+}
+.input_pass{
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: 95%;
+}
+.input_write{
+    display: block;
+    border-bottom: 2px solid #00BCD4;
+    margin-top: 6px;
+    outline-style: none;
 }
 .login_ref{
     margin-top: 75px;
