@@ -21,7 +21,7 @@ const RightSideBar = ({ socket }) => {
         // {/* tro ve login */}
         navigate('/');
         localStorage.clear();
-        sessionStorage.clear();
+
     };
 
     useEffect(() => {
