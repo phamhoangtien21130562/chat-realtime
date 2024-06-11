@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import '../assets/style/login.css';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import withoutAuth from './withoutAuth';
-
 const LoginForm = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -39,20 +38,21 @@ const LoginForm = () => {
             },
         };
         socket.send(JSON.stringify(login));
-
     };
 
     useEffect(() => {
         if (loginSuccess) {
             // Lưu trữ thông tin đăng nhập vào localStorage
-            sessionStorage.setItem('username', username);
-            sessionStorage.setItem('password', password);
+            console.log('Lưu trữ thông tin đăng nhập vào localStorage');
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password);
         }
         if (socket) {
             socket.onmessage = (event) => {
                 const responseData = JSON.parse(event.data);
                 if (responseData && responseData.status === "success") {
-                    sessionStorage.setItem('re_login_code', responseData.data["RE_LOGIN_CODE"]);
+                    console.log('Đăng nhập thành công');
+                    localStorage.setItem('re_login_code', responseData.data["RE_LOGIN_CODE"]);
                     setNotification('Đăng nhập thành công!');
                     setLoginSuccess(true);
 
@@ -61,6 +61,7 @@ const LoginForm = () => {
                     }, 1000);
 
                 } else {
+                    console.log('Sai tên đăng nhập hoặc mật khẩu');
                     setNotification('Sai tên đăng nhập hoặc mật khẩu!');
                 }
             };
@@ -129,38 +130,6 @@ const LoginForm = () => {
             </div>
         </div>
     );
-    return (
-        <div className="to">
-            <div className="form">
-                <form className="register_form">
-                    <h2>Đăng nhập tài khoản</h2>
-                    <i className="fab fa-app-store-ios"></i>
-                    <div className="username_Input">
-                        <div className="label_username">
-                            <label style={{marginLeft: '0px'}}> Username:</label>
-                        </div>
-                        <input placeholder="Tên đăng nhập"
-                               type="text"
-                               name="hoten"/>
-                    </div>
-                    <div className="pass_Input">
-                        <div className="label_pass">
-                            <label style={{marginLeft: '0px'}}> Password:</label>
-                        </div>
-                        <input type="password"
-                               placeholder="Mật khẩu"
-                               name="pass"/>
-                    </div>
-                    <input id="submit" type="submit" name="submit" value="Đăng nhập"/>
-                    <div className="login_ref">
-                        <p>Bạn chưa có tài khoản?<a href="/register" className="">Đăng ký!</a></p>
-                    </div>
-                </form>
-            </div>
-        </div>
-    );
+};
 
-}
 export default withoutAuth(LoginForm);
-
-;
