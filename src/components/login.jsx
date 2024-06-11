@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import '../assets/style/login.css';
 import {useNavigate} from 'react-router-dom';
+import withoutAuth from './withoutAuth';
 
 const LoginForm = () => {
     const [username, setUsername] = useState("");
@@ -160,5 +161,6 @@ const LoginForm = () => {
     );
 
 }
+export default withoutAuth(LoginForm);
 
-export default LoginForm;
+;
