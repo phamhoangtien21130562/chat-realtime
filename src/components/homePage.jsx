@@ -9,6 +9,48 @@ import RightSideBar from "./rightSideBar/RightSideBar";
 const HomePage = () => {
     const [socket, setSocket] = useState(null);
 
+    function handleCreateRoom(roomName) {
+        const requestcreateRoom = {
+            action: "onchat",
+            data: {
+                event: "CREATE_ROOM",
+                data: {
+                    name: roomName,
+                },
+            },
+        };
+        socket.send(JSON.stringify(requestcreateRoom));
+        const userList = {
+            action: 'onchat',
+            data: {
+                event: 'GET_USER_LIST',
+            },
+        };
+        socket.send(JSON.stringify(userList));
+    }
+
+    function handleJoinRoom(roomName) {
+        const joinRequest = {
+            action: "onchat",
+            data: {
+                event: "JOIN_ROOM",
+                data: {
+                    name: roomName,
+                },
+            },
+        };
+
+        socket.send(JSON.stringify(joinRequest));
+        console.log("Đã gửi yêu cầu ");
+        const userList = {
+            action: 'onchat',
+            data: {
+                event: 'GET_USER_LIST',
+            },
+        };
+        socket.send(JSON.stringify(userList));
+    }
+
     useEffect(() => {
         // Khởi tạo kết nối với server qua websocket
         const socket = new WebSocket("ws://140.238.54.136:8080/chat/chat");
@@ -39,6 +81,20 @@ const HomePage = () => {
                     // Lưu relogincode vào localStorage
                     localStorage.setItem('re_login_code', response.data["RE_LOGIN_CODE"]);
                     console.log("re_login: " + response.data["RE_LOGIN_CODE"]);
+                }
+                if (response.status === 'success' && response.event === 'CREATE_ROOM') {
+                    const receivedRoomName = response.data;
+                    console.log(receivedRoomName);
+                }
+                if (response.status === 'error' && response.event === 'CREATE_ROOM') {
+                    alert(response.mes)
+                }
+                if (response.status === 'success' && response.event === 'JOIN_ROOM') {
+                    const receivedRoomName = response.data;
+                    console.log(receivedRoomName)
+                }
+                if (response.status === 'error' && response.event === 'JOIN_ROOM') {
+                    alert(response.mes)
                 }
             };
 
