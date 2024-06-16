@@ -6,7 +6,7 @@ const UserInfo = () => {
             <div className="user">
                 {/*<img src="" alt=""/>*/}
                 <img src="/img/avata.png" alt=""/>
-                <h2>OzuSus</h2>
+                <h2>{localStorage.getItem('username')}</h2>
             </div>
             <div className="icons">
                 <img src="/img/more.png" alt=""/>

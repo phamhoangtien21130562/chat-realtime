@@ -1,18 +1,25 @@
 import '../../assets/style/chatList.css'
-import {useState} from "react";
 
 const ChatList = () => {
-    const [addMode,setAddMode] = useState(false)
     return(
         <div className='chatList'>
-            <div className="search">
-                <div className="searchBar">
-                    <img src="/img/search.png" alt=""/>
-                    <input type="text" placeholder='Search'/>
+            <div className="searchUserAndRoom">
+                <div className="search">
+                    <div className="searchBar">
+                        <img src="/img/search.png" alt=""/>
+                        <input type="text" placeholder='Search User'/>
+                    </div>
+                    <img src={"/img/plus.png"} alt="" className="add"/>
                 </div>
-                <img src={addMode ? "/img/minus.png" : "/img/plus.png"} alt="" className="add"
-                     onClick={() => setAddMode((prev) => !prev)}/>
+                <div className="search">
+                    <div className="searchBar">
+                        <img src="/img/search.png" alt=""/>
+                        <input type="text" placeholder='Create or search room'/>
+                    </div>
+                    <img src={"/img/plus.png"} alt="" className="add"/>
+                </div>
             </div>
+
             <div className="items">
                 <img src="/img/avata.png" alt=""/>
                 <div className="texts">
