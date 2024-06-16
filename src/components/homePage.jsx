@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import withAuth from './withAuth'; // Import HOC withAuth
 import '../assets/style/homePage.css'; // Import CSS file
-// import LeftSideBar from "./leftSideBar/LeftSideBar";
+import LeftSideBar from "./leftSideBar/LeftSideBar";
 import MainChat from "./mainChat/MainChat";
 import RightSideBar from "./rightSideBar/RightSideBar";
 import UserInfo from "./leftSideBar/UserInfo";
 import ChatList from "./leftSideBar/ChatList";
 import SearchBox from "./leftSideBar/searchBox";
+import '../assets/style/leftSideBar.css'
 
 // Component của trang HomePage
 const HomePage = () => {
@@ -115,7 +116,7 @@ const HomePage = () => {
             <div className='leftSideBar'>
                 <UserInfo/>
                 <div className='chatList'>
-                    <UserInfo
+                    <SearchBox
                         handleCreateRoom={handleCreateRoom}
                         handleJoinRoom={handleJoinRoom}/>
                     <ChatList/>
