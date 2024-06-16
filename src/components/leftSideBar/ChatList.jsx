@@ -24,7 +24,12 @@ const ChatList = ({handleJoinRoom, handleCreateRoom, handleSearchRoom }) => {
 
     }
 
-
+    function JoinRoomClick() {
+        if (roomName !== "") {
+            handleJoinRoom(roomName); // Truyền giá trị message vào hàm handleSendMessage
+            setRoomName('');
+        }
+    }
 
     return(
         <div className='chatList'>
