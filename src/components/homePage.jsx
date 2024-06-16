@@ -109,7 +109,9 @@ const HomePage = () => {
 
     return (
         <div className="App">
-            <LeftSideBar />
+            <LeftSideBar
+                handleCreateRoom={handleCreateRoom}
+                handleJoinRoom={handleJoinRoom}/>
             <MainChat />
             <RightSideBar />
         </div>
