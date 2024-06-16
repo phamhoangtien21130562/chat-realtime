@@ -28,10 +28,10 @@ body {
     box-shadow: 0px 0px 14px 0px grey;
     background-color: white;
 }
-h2 {
-    margin-top: 50px;
-    margin-bottom: 30px;
-}
+/*h2 {*/
+/*    margin-top: 50px;*/
+/*    margin-bottom: 30px;*/
+/*}*/
 i.fab.fa-app-store-ios {
     display: block;
     margin-bottom: 50px;
