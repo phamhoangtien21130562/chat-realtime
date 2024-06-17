@@ -14,11 +14,20 @@
 .chatList::-webkit-scrollbar-track {
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+.searchUserAndRoom{
+    display: flex;
+    flex-direction: column;
+
+}
 .chatList .search{
     display: flex;
     align-items: center;
     gap: 20px;
     padding:0 20px;
+}
+.chatList .search:last-child{
+    margin-top: 20px;
 }
 .chatList .search .searchBar{
     flex: 1;
