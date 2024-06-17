@@ -2,6 +2,31 @@ import React, { useEffect, useState } from 'react';
 import '../assets/style/login.css';
 import { useNavigate } from 'react-router-dom';
 import withoutAuth from './withoutAuth';
+import CryptoJS from 'crypto-js';
+
+const key = CryptoJS.enc.Utf8.parse('1234567891234567');
+const iv = CryptoJS.enc.Utf8.parse('vector khởi tạo');
+
+// Hàm mã hóa
+const encryptData = (data) => {
+    const encrypted = CryptoJS.AES.encrypt(
+        JSON.stringify(data),
+        key,
+        { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+    );
+    return encrypted.toString();
+};
+
+// Hàm giải mã
+const decryptData = (encryptedData) => {
+    const decrypted = CryptoJS.AES.decrypt(
+        encryptedData,
+        key,
+        { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+    );
+    return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+};
+
 const LoginForm = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -42,11 +67,13 @@ const LoginForm = () => {
     };
 
     useEffect(() => {
-        if (loginSuccess) {
-            // Lưu trữ thông tin đăng nhập vào localStorage
+        if (loginSuccess && username && password) {
+            const encryptedUsername = encryptData(username);
+            const encryptedPassword = encryptData(password);
+
             console.log('Lưu trữ thông tin đăng nhập vào localStorage');
-            localStorage.setItem('username', username);
-            localStorage.setItem('password', password);
+            localStorage.setItem('username', encryptedUsername);
+            localStorage.setItem('password', encryptedPassword);
         }
         if (socket) {
             socket.onmessage = (event) => {
@@ -67,7 +94,28 @@ const LoginForm = () => {
                 }
             };
         }
-    }, [socket, loginSuccess, username, password]);
+    }, [socket, loginSuccess, username, password, navigate]);
+
+    useEffect(() => {
+        // Kiểm tra nếu có thông tin đăng nhập trong localStorage thì giải mã và cập nhật state
+        const storedUsername = localStorage.getItem('username');
+        const storedPassword = localStorage.getItem('password');
+
+        if (storedUsername && storedPassword) {
+            try {
+                const decryptedUsername = decryptData(storedUsername);
+                const decryptedPassword = decryptData(storedPassword);
+
+                setUsername(decryptedUsername);
+                setPassword(decryptedPassword);
+            } catch (error) {
+                console.error('Lỗi khi giải mã thông tin đăng nhập từ localStorage:', error);
+                // Xử lý lỗi khi giải mã (ví dụ: xóa thông tin không hợp lệ từ localStorage)
+                localStorage.removeItem('username');
+                localStorage.removeItem('password');
+            }
+        }
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
