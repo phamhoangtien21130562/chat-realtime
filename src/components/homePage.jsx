@@ -8,6 +8,21 @@ import UserInfo from "./leftSideBar/UserInfo";
 import ChatList from "./leftSideBar/ChatList";
 import SearchBox from "./leftSideBar/searchBox";
 import '../assets/style/leftSideBar.css'
+import CryptoJS from 'crypto-js';
+
+const key = CryptoJS.enc.Utf8.parse('1234567891234567');
+const iv = CryptoJS.enc.Utf8.parse('vector khởi tạo');
+
+// Hàm giải mã
+const decryptData = (encryptedData) => {
+    const decrypted = CryptoJS.AES.decrypt(
+        encryptedData,
+        key,
+        { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+    );
+    return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+};
+
 
 // Component của trang HomePage
 const HomePage = () => {
@@ -61,17 +76,33 @@ const HomePage = () => {
         socket.addEventListener("open", () => {
             console.log("WebSocket connection established.");
             // Gửi message RE_LOGIN để đăng nhập lại với thông tin user và code
-            socket.send(JSON.stringify({
-                    action: "onchat",
-                    data: {
-                        event: "RE_LOGIN",
-                        data: {
-                            user: localStorage.getItem('username'),
-                            code: localStorage.getItem('re_login_code')
+            // Giải mã thông tin từ localStorage
+            const storedUsername = localStorage.getItem('username');
+            const storedReLoginCode = localStorage.getItem('re_login_code');
+
+            if (storedUsername && storedReLoginCode) {
+                try {
+                    const decryptedUsername = decryptData(storedUsername);
+
+                    // Gửi message RE_LOGIN để đăng nhập lại với thông tin user và code đã giải mã
+                    socket.send(JSON.stringify({
+                            action: "onchat",
+                            data: {
+                                event: "RE_LOGIN",
+                                data: {
+                                    user: decryptedUsername,
+                                    code: storedReLoginCode
+                                }
+                            }
                         }
-                    }
+                    ));
+                } catch (error) {
+                    console.error('Lỗi khi giải mã thông tin đăng nhập từ localStorage:', error);
+                    // Xử lý lỗi khi giải mã (ví dụ: xóa thông tin không hợp lệ từ localStorage)
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('re_login_code');
                 }
-            ));
+            }
             socket.send(JSON.stringify({
                     action: 'onchat',
                     data: {
