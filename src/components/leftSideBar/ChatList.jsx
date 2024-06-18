@@ -1,79 +1,21 @@
-import '../../assets/style/chatList.css'
-import {useState} from "react";
+import '../../assets/style/chatList.css';
 
-const ChatList = ({handleJoinRoom, handleCreateRoom, handleSearchRoom }) => {
+const ChatList = ({ users }) => {
+    return (
+        <ul>
+            {users.map((user, index) => (
+                <li key={index} className="items">
+                    <img src="/img/avata.png" alt="" />
+                    <div className="texts">
+                        <span>{user.name}</span>
 
-
-
-    return(
-
-            <ul>
-                <li className="items">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <span>a</span>
-                        <p>Hello World</p>
+                        <p> {user.actionTime}</p>
                     </div>
                 </li>
-                <li className="items">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <span>OzuSus</span>
-                        <p>Hello World</p>
-                    </div>
-                </li>
-                <li className="items">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <span>OzuSus</span>
-                        <p>Hello World</p>
-                    </div>
-                </li>
-                <li className="items">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <span>OzuSus</span>
-                        <p>Hello World</p>
-                    </div>
-                </li>
-                <li className="items">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <span>OzuSus</span>
-                        <p>Hello World</p>
-                    </div>
-                </li>
-                <li className="items">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <span>OzuSus</span>
-                        <p>Hello World</p>
-                    </div>
-                </li>
-                <li className="items">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <span>OzuSus</span>
-                        <p>Hello World</p>
-                    </div>
-                </li>
-                <li className="items">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <span>OzuSus</span>
-                        <p>Hello World</p>
-                    </div>
-                </li>
-                <li className="items">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <span>OzuSus</span>
-                        <p>Hello World</p>
-                    </div>
-                </li>
-            </ul>
-
-        // </div>
+            ))}
+            {users.length === 0 && <p>Không có người dùng nào được tải lên.</p>}
+        </ul>
     );
 };
-export default ChatList
+
+export default ChatList;

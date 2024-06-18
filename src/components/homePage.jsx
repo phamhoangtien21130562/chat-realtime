@@ -7,7 +7,7 @@ import RightSideBar from "./rightSideBar/RightSideBar";
 import UserInfo from "./leftSideBar/UserInfo";
 import ChatList from "./leftSideBar/ChatList";
 import SearchBox from "./leftSideBar/searchBox";
-import '../assets/style/leftSideBar.css'
+import '../assets/style/leftSideBar.css';
 import CryptoJS from 'crypto-js';
 
 const key = CryptoJS.enc.Utf8.parse('1234567891234567');
@@ -23,10 +23,10 @@ const decryptData = (encryptedData) => {
     return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
 };
 
-
 // Component của trang HomePage
 const HomePage = () => {
     const [socket, setSocket] = useState(null);
+    const [users, setUsers] = useState([]);
 
     function handleCreateRoom(roomName) {
         const requestcreateRoom = {
@@ -122,14 +122,18 @@ const HomePage = () => {
                     console.log(receivedRoomName);
                 }
                 if (response.status === 'error' && response.event === 'CREATE_ROOM') {
-                    alert(response.mes)
+                    alert(response.mes);
                 }
                 if (response.status === 'success' && response.event === 'JOIN_ROOM') {
                     const receivedRoomName = response.data;
-                    console.log(receivedRoomName)
+                    console.log(receivedRoomName);
                 }
                 if (response.status === 'error' && response.event === 'JOIN_ROOM') {
-                    alert(response.mes)
+                    alert(response.mes);
+                }
+                if (response.status === 'success' && response.event === 'GET_USER_LIST') {
+                    console.log('Danh sách người dùng:', response.data);
+                    setUsers(response.data);
                 }
             };
 
@@ -150,7 +154,7 @@ const HomePage = () => {
                     <SearchBox
                         handleCreateRoom={handleCreateRoom}
                         handleJoinRoom={handleJoinRoom}/>
-                    <ChatList/>
+                    <ChatList users={users}/>
                 </div>
             </div>
             <MainChat/>
