@@ -70,6 +70,24 @@ const HomePage = () => {
         socket.send(JSON.stringify(userList));
     }
 
+    function handleSearchUser(username) {
+        // Kiểm tra xem user có trong danh sách không
+        const userIndex = users.findIndex(user => user.name === username);
+
+        if (userIndex !== -1) {
+            // Nếu đã có, đưa user này lên đầu danh sách
+            const updatedUsers = [...users];
+            const foundUser = updatedUsers.splice(userIndex, 1)[0];
+            updatedUsers.unshift(foundUser);
+            setUsers(updatedUsers);
+        } else {
+            // Nếu chưa có, tạo mới user và đưa lên đầu danh sách
+            const newUser = { name: username, actionTime: new Date().toLocaleString() };
+            const updatedUsers = [newUser, ...users];
+            setUsers(updatedUsers);
+        }
+    }
+
     useEffect(() => {
         // Khởi tạo kết nối với server qua websocket
         const socket = new WebSocket("ws://140.238.54.136:8080/chat/chat");
@@ -86,16 +104,15 @@ const HomePage = () => {
 
                     // Gửi message RE_LOGIN để đăng nhập lại với thông tin user và code đã giải mã
                     socket.send(JSON.stringify({
-                            action: "onchat",
+                        action: "onchat",
+                        data: {
+                            event: "RE_LOGIN",
                             data: {
-                                event: "RE_LOGIN",
-                                data: {
-                                    user: decryptedUsername,
-                                    code: storedReLoginCode
-                                }
+                                user: decryptedUsername,
+                                code: storedReLoginCode
                             }
                         }
-                    ));
+                    }));
                 } catch (error) {
                     console.error('Lỗi khi giải mã thông tin đăng nhập từ localStorage:', error);
                     // Xử lý lỗi khi giải mã (ví dụ: xóa thông tin không hợp lệ từ localStorage)
@@ -104,12 +121,11 @@ const HomePage = () => {
                 }
             }
             socket.send(JSON.stringify({
-                    action: 'onchat',
-                    data: {
-                        event: 'GET_USER_LIST',
-                    },
-                }
-            ));
+                action: 'onchat',
+                data: {
+                    event: 'GET_USER_LIST',
+                },
+            }));
             socket.onmessage = (event) => {
                 const response = JSON.parse(event.data);
                 if (response.status === 'success' && response.event === 'RE_LOGIN') {
@@ -149,19 +165,20 @@ const HomePage = () => {
     return (
         <div className="App">
             <div className='leftSideBar'>
-                <UserInfo/>
+                <UserInfo />
                 <div className='chatList'>
                     <SearchBox
                         handleCreateRoom={handleCreateRoom}
-                        handleJoinRoom={handleJoinRoom}/>
-                    <ChatList users={users}/>
+                        handleJoinRoom={handleJoinRoom}
+                        handleSearchUser={handleSearchUser} // Thêm prop handleSearchUser
+                    />
+                    <ChatList users={users} /> {/* Truyền danh sách users vào ChatList */}
                 </div>
             </div>
-            <MainChat/>
-            <RightSideBar/>
+            <MainChat />
+            <RightSideBar />
         </div>
     );
 };
 
-// Áp dụng withAuth cho HomePage và xuất nó
 export default withAuth(HomePage);

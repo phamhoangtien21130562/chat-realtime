@@ -1,61 +1,68 @@
-import '../../assets/style/chatList.css'
-import {useState} from "react";
+import React, { useState } from 'react';
 
-const SearchBox = ({handleJoinRoom, handleCreateRoom, handleSearchRoom}) => {
+const SearchBox = ({ handleJoinRoom, handleCreateRoom, handleSearchRoom, handleSearchUser, socket }) => {
+    const [searchUserInput, setSearchUserInput] = useState('');
+    const [searchRoomInput, setSearchRoomInput] = useState('');
 
+    const handleChangeUser = (event) => {
+        setSearchUserInput(event.target.value);
+    };
 
-    const [roomName, setRoomName] = useState('');
+    const handleChangeRoom = (event) => {
+        setSearchRoomInput(event.target.value);
+    };
 
-    function handleChange(event) {
-        setRoomName(event.target.value); // Cập nhật giá trị từ thẻ input vào state
-    }
-
-    function SearchRoomClick() {
-        if (roomName !== "") {
-            handleSearchRoom(roomName); // Truyền giá trị message vào hàm handleSendMessage
-            setRoomName('');
+    const handleSearchUserClick = () => {
+        if (searchUserInput.trim() !== '') {
+            handleSearchUser(searchUserInput.trim());
+            setSearchUserInput('');
         }
+    };
 
-    }
-
-    function CreateRoomClick() {
-        if (roomName !== "") {
-            handleCreateRoom(roomName);
-            setRoomName('');
+    const handleCreateRoomClick = () => {
+        if (searchRoomInput.trim() !== '') {
+            handleCreateRoom(searchRoomInput.trim());
+            setSearchRoomInput('');
         }
+    };
 
-    }
-
-    function JoinRoomClick() {
-        if (roomName !== "") {
-            handleJoinRoom(roomName); // Truyền giá trị message vào hàm handleSendMessage
-            setRoomName('');
+    const handleJoinRoomClick = () => {
+        if (searchRoomInput.trim() !== '') {
+            handleJoinRoom(searchRoomInput.trim());
+            setSearchRoomInput('');
         }
-    }
+    };
 
     return (
         <div className="searchUserAndRoom">
             <div className="search">
                 <div className="searchBar">
-                    <img src="/img/search.png" alt=""/>
-                    <input type="text" placeholder='Search User'/>
+                    <img src="/img/search.png" alt="" />
+                    <input
+                        type="text"
+                        value={searchUserInput}
+                        onChange={handleChangeUser}
+                        placeholder="Search User"
+                    />
                 </div>
-                <img src={"/img/plus.png"} alt="" className="add"/>
+                <img src={"/img/plus.png"} onClick={handleSearchUserClick} alt="" className="add" />
             </div>
             <div className="search">
                 <div className="searchBar">
-                    <img src="/img/search.png" alt=""/>
-                    <input type="text"
-                           id='roomName'
-                           className='form-control'
-                           value={roomName}
-                           onChange={handleChange}
-                           placeholder='Create or search room'/>
+                    <img src="/img/search.png" alt="" />
+                    <input
+                        type="text"
+                        className='form-control'
+                        value={searchRoomInput}
+                        onChange={handleChangeRoom}
+                        placeholder='Create or search room'
+                    />
                 </div>
-                <img src={"/img/plus.png"} onClick={CreateRoomClick} alt="" className="add"/>
-                <img src={"/img/arrowRight.png"} onClick={JoinRoomClick} alt="" className="add"/>
+                <img src={"/img/plus.png"} onClick={handleCreateRoomClick} alt="" className="add" />
+                <img src={"/img/arrowRight.png"} onClick={handleJoinRoomClick} alt="" className="add" />
             </div>
         </div>
     );
-}
-export default SearchBox
+};
+
+export default SearchBox;
