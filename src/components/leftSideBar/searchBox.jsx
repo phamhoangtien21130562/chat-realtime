@@ -1,65 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-const SearchBox = ({ handleJoinRoom, handleCreateRoom, handleSearchRoom, handleSearchUser, socket }) => {
-    const [searchUserInput, setSearchUserInput] = useState('');
-    const [searchRoomInput, setSearchRoomInput] = useState('');
+const SearchBox = ({ handleCreateRoom, handleJoinRoom, usersList, setUsersList }) => {
+    const [roomName, setRoomName] = useState('');
+    const [userName, setUserName] = useState('');
 
-    const handleChangeUser = (event) => {
-        setSearchUserInput(event.target.value);
-    };
+    function handleChange(event) {
+        setUserName(event.target.value); // Update userName state with input value
+    }
 
-    const handleChangeRoom = (event) => {
-        setSearchRoomInput(event.target.value);
-    };
-
-    const handleSearchUserClick = () => {
-        if (searchUserInput.trim() !== '') {
-            handleSearchUser(searchUserInput.trim());
-            setSearchUserInput('');
+    function CreateRoomClick() {
+        if (roomName.trim() !== "") {
+            handleCreateRoom(roomName.trim());
+            setRoomName('');
         }
-    };
+    }
 
-    const handleCreateRoomClick = () => {
-        if (searchRoomInput.trim() !== '') {
-            handleCreateRoom(searchRoomInput.trim());
-            setSearchRoomInput('');
+    function JoinRoomClick() {
+        if (roomName.trim() !== "") {
+            handleJoinRoom(roomName.trim());
+            setRoomName('');
         }
-    };
+    }
 
-    const handleJoinRoomClick = () => {
-        if (searchRoomInput.trim() !== '') {
-            handleJoinRoom(searchRoomInput.trim());
-            setSearchRoomInput('');
+    function SearchUserClick() {
+        if (userName.trim() !== "") {
+            const currentDateTime = new Date().toISOString(); // Lấy thời gian hiện tại ở định dạng ISO
+
+            // Check if userName already exists in usersList
+            const userIndex = usersList.findIndex(user => user.name === userName);
+
+            if (userIndex !== -1) {
+                // If userName exists, update its actionTime and move it to the top
+                const updatedUsers = [
+                    ...usersList.slice(0, userIndex),
+                    { ...usersList[userIndex], actionTime: currentDateTime },
+                    ...usersList.slice(userIndex + 1)
+                ];
+                setUsersList(updatedUsers);
+            } else {
+                // If userName does not exist, add it to the top with the current date and time
+                const newUser = { name: userName, actionTime: currentDateTime };
+                const updatedUsers = [newUser, ...usersList];
+                setUsersList(updatedUsers);
+            }
+            setUserName(''); // Clear input after adding user
         }
-    };
+    }
 
     return (
         <div className="searchUserAndRoom">
             <div className="search">
                 <div className="searchBar">
-                    <img src="/img/search.png" alt="" />
+                    <img src="/img/search.png" alt=""/>
                     <input
                         type="text"
-                        value={searchUserInput}
-                        onChange={handleChangeUser}
-                        placeholder="Search User"
+                        id='userName'
+                        className='form-control'
+                        value={userName}
+                        onChange={handleChange}
+                        placeholder='Search or add user'
                     />
                 </div>
-                <img src={"/img/plus.png"} onClick={handleSearchUserClick} alt="" className="add" />
+                <img src={"/img/plus.png"} onClick={SearchUserClick} alt="" className="add"/>
             </div>
             <div className="search">
                 <div className="searchBar">
-                    <img src="/img/search.png" alt="" />
+                    <img src="/img/search.png" alt=""/>
                     <input
                         type="text"
+                        id='roomName'
                         className='form-control'
-                        value={searchRoomInput}
-                        onChange={handleChangeRoom}
+                        value={roomName}
+                        onChange={(event) => setRoomName(event.target.value)}
                         placeholder='Create or search room'
                     />
                 </div>
-                <img src={"/img/plus.png"} onClick={handleCreateRoomClick} alt="" className="add" />
-                <img src={"/img/arrowRight.png"} onClick={handleJoinRoomClick} alt="" className="add" />
+                <img src={"/img/plus.png"} onClick={CreateRoomClick} alt="" className="add"/>
+                <img src={"/img/arrowRight.png"} onClick={JoinRoomClick} alt="" className="add"/>
             </div>
         </div>
     );

@@ -13,7 +13,7 @@ import CryptoJS from 'crypto-js';
 const key = CryptoJS.enc.Utf8.parse('1234567891234567');
 const iv = CryptoJS.enc.Utf8.parse('vector khởi tạo');
 
-// Hàm giải mã
+// Decrypt function
 const decryptData = (encryptedData) => {
     const decrypted = CryptoJS.AES.decrypt(
         encryptedData,
@@ -26,7 +26,7 @@ const decryptData = (encryptedData) => {
 // Component của trang HomePage
 const HomePage = () => {
     const [socket, setSocket] = useState(null);
-    const [users, setUsers] = useState([]);
+    const [usersList, setUsersList] = useState([]);
 
     function handleCreateRoom(roomName) {
         const requestcreateRoom = {
@@ -68,24 +68,6 @@ const HomePage = () => {
             },
         };
         socket.send(JSON.stringify(userList));
-    }
-
-    function handleSearchUser(username) {
-        // Kiểm tra xem user có trong danh sách không
-        const userIndex = users.findIndex(user => user.name === username);
-
-        if (userIndex !== -1) {
-            // Nếu đã có, đưa user này lên đầu danh sách
-            const updatedUsers = [...users];
-            const foundUser = updatedUsers.splice(userIndex, 1)[0];
-            updatedUsers.unshift(foundUser);
-            setUsers(updatedUsers);
-        } else {
-            // Nếu chưa có, tạo mới user và đưa lên đầu danh sách
-            const newUser = { name: username, actionTime: new Date().toLocaleString() };
-            const updatedUsers = [newUser, ...users];
-            setUsers(updatedUsers);
-        }
     }
 
     useEffect(() => {
@@ -149,7 +131,7 @@ const HomePage = () => {
                 }
                 if (response.status === 'success' && response.event === 'GET_USER_LIST') {
                     console.log('Danh sách người dùng:', response.data);
-                    setUsers(response.data);
+                    setUsersList(response.data);
                 }
             };
 
@@ -165,20 +147,22 @@ const HomePage = () => {
     return (
         <div className="App">
             <div className='leftSideBar'>
-                <UserInfo />
+                <UserInfo/>
                 <div className='chatList'>
                     <SearchBox
                         handleCreateRoom={handleCreateRoom}
                         handleJoinRoom={handleJoinRoom}
-                        handleSearchUser={handleSearchUser} // Thêm prop handleSearchUser
+                        usersList={usersList}
+                        setUsersList={setUsersList}
                     />
-                    <ChatList users={users} /> {/* Truyền danh sách users vào ChatList */}
+                    <ChatList users={usersList}/>
                 </div>
             </div>
-            <MainChat />
-            <RightSideBar />
+            <MainChat/>
+            <RightSideBar/>
         </div>
     );
 };
 
+// Áp dụng withAuth cho HomePage và xuất nó
 export default withAuth(HomePage);
