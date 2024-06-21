@@ -13,7 +13,7 @@ import CryptoJS from 'crypto-js';
 const key = CryptoJS.enc.Utf8.parse('1234567891234567');
 const iv = CryptoJS.enc.Utf8.parse('vector khởi tạo');
 
-// Hàm giải mã
+// Decrypt function
 const decryptData = (encryptedData) => {
     const decrypted = CryptoJS.AES.decrypt(
         encryptedData,
@@ -26,7 +26,7 @@ const decryptData = (encryptedData) => {
 // Component của trang HomePage
 const HomePage = () => {
     const [socket, setSocket] = useState(null);
-    const [users, setUsers] = useState([]);
+    const [usersList, setUsersList] = useState([]);
 
     function handleCreateRoom(roomName) {
         const requestcreateRoom = {
@@ -86,16 +86,15 @@ const HomePage = () => {
 
                     // Gửi message RE_LOGIN để đăng nhập lại với thông tin user và code đã giải mã
                     socket.send(JSON.stringify({
-                            action: "onchat",
+                        action: "onchat",
+                        data: {
+                            event: "RE_LOGIN",
                             data: {
-                                event: "RE_LOGIN",
-                                data: {
-                                    user: decryptedUsername,
-                                    code: storedReLoginCode
-                                }
+                                user: decryptedUsername,
+                                code: storedReLoginCode
                             }
                         }
-                    ));
+                    }));
                 } catch (error) {
                     console.error('Lỗi khi giải mã thông tin đăng nhập từ localStorage:', error);
                     // Xử lý lỗi khi giải mã (ví dụ: xóa thông tin không hợp lệ từ localStorage)
@@ -104,12 +103,11 @@ const HomePage = () => {
                 }
             }
             socket.send(JSON.stringify({
-                    action: 'onchat',
-                    data: {
-                        event: 'GET_USER_LIST',
-                    },
-                }
-            ));
+                action: 'onchat',
+                data: {
+                    event: 'GET_USER_LIST',
+                },
+            }));
             socket.onmessage = (event) => {
                 const response = JSON.parse(event.data);
                 if (response.status === 'success' && response.event === 'RE_LOGIN') {
@@ -133,7 +131,7 @@ const HomePage = () => {
                 }
                 if (response.status === 'success' && response.event === 'GET_USER_LIST') {
                     console.log('Danh sách người dùng:', response.data);
-                    setUsers(response.data);
+                    setUsersList(response.data);
                 }
             };
 
@@ -153,8 +151,11 @@ const HomePage = () => {
                 <div className='chatList'>
                     <SearchBox
                         handleCreateRoom={handleCreateRoom}
-                        handleJoinRoom={handleJoinRoom}/>
-                    <ChatList users={users}/>
+                        handleJoinRoom={handleJoinRoom}
+                        usersList={usersList}
+                        setUsersList={setUsersList}
+                    />
+                    <ChatList users={usersList}/>
                 </div>
             </div>
             <MainChat/>
