@@ -24,7 +24,7 @@ const ChatList = ({ users }) => {
                     </div>
                 </li>
             ))}
-            {users.length === 0 && <p>Không có người dùng nào được tải lên.</p>}
+            {users.length === 0 && <p className="no-users">Chưa có danh sách liên hệ!</p>}
         </ul>
     );
 };
