@@ -17,7 +17,9 @@ const ChatList = ({ users }) => {
         <ul>
             {users.map((user, index) => (
                 <li key={index} className="items">
-                    <img src="/img/avata.png" alt="" />
+
+                    <img src={user.type===0 ? "/img/avata.png" : "/img/avatamuti.png"}
+                         alt="" />
                     <div className="texts">
                         <span>{user.name}</span>
                         <p>{formatDateTime(user.actionTime)}</p>

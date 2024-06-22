@@ -1,8 +1,20 @@
 import '../../assets/style/mainChat.css'
 import EmojiPicker from "emoji-picker-react";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
+
+const formatDateTime = (dateTimeString) => {
+    const dateTime = new Date(dateTimeString);
+    const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
+
+    const datePart = dateTime.toLocaleDateString(undefined, dateOptions);
+    const timePart = dateTime.toLocaleTimeString(undefined, timeOptions);
+
+    return `${datePart} ${timePart}`;
+};
 
 const MainChat = () => {
+
     const [openEmoji, setOpenEmoji] = useState(false)
     const [emojiToText, setEmojiToText] = useState("")
 
@@ -17,6 +29,7 @@ const MainChat = () => {
     };
 
     return (
+
         <div className='mainChat'>
             <div className="topChat">
                 <div className="user">
@@ -34,85 +47,28 @@ const MainChat = () => {
             </div>
             <div className="centerChat">
                 <div className="messages">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloribus eius expedita
-                            ipsum laborum magnam non repellendus reprehenderit unde velit. Ab distinctio doloribus fuga,
-                            nulla quos reiciendis sunt tempore tenetur?
-                        </p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="messages own">
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloribus eius expedita
-                            ipsum laborum magnam non repellendus reprehenderit unde velit. Ab distinctio doloribus fuga,
-                            nulla quos reiciendis sunt tempore tenetur?
-                        </p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="messages">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloribus eius expedita
-                            ipsum laborum magnam non repellendus reprehenderit unde velit. Ab distinctio doloribus fuga,
-                            nulla quos reiciendis sunt tempore tenetur?
-                        </p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="messages own">
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloribus eius expedita
-                            ipsum laborum magnam non repellendus reprehenderit unde velit. Ab distinctio doloribus fuga,
-                            nulla quos reiciendis sunt tempore tenetur?
-                        </p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="messages">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloribus eius expedita
-                            ipsum laborum magnam non repellendus reprehenderit unde velit. Ab distinctio doloribus fuga,
-                            nulla quos reiciendis sunt tempore tenetur?
-                        </p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="messages own">
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloribus eius expedita
-                            ipsum laborum magnam non repellendus reprehenderit unde velit. Ab distinctio doloribus fuga,
-                            nulla quos reiciendis sunt tempore tenetur?
-                        </p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="messages">
-                    <img src="/img/avata.png" alt=""/>
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloribus eius expedita
-                            ipsum laborum magnam non repellendus reprehenderit unde velit. Ab distinctio doloribus fuga,
-                            nulla quos reiciendis sunt tempore tenetur?
-                        </p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="messages own">
-                    <div className="texts">
-                        <img
-                            src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2021/06/Subnautica-Sea-Dragon-1.jpg"
-                            alt=""/>
+                    {/*<span>{user.name}</span>*/}
+                    {/*<p>{formatDateTime(user.actionTime)}</p>*/}
 
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis doloribus eius expedita
-                            ipsum laborum magnam non repellendus reprehenderit unde velit. Ab distinctio doloribus fuga,
-                            nulla quos reiciendis sunt tempore tenetur?
+                    {/*<p classname="dateTime">01/01/2003 0:10:12 PM</p>*/}
+                    <img src="/img/avata.png" alt=""className="avatarImage"/>
+                    <div className="texts">
+                        <span className="nameMessage">Tien</span>
+                        <p>user1
                         </p>
-                        <span>1 min ago</span>
+                        <span>01/01/2003 0:10:12 PM</span>
+                    </div>
+
+                </div>
+                <div className="messages own">
+                <div className="texts">
+                    <p>user2
+                        </p>
+                        <span>01/01/2003 0:11:12 PM</span>
                     </div>
                 </div>
+
+
                 <div ref={endRef}></div>
             </div>
             <div className="bottomChat">
@@ -135,6 +91,7 @@ const MainChat = () => {
                 <button className="sendButton">Send</button>
             </div>
         </div>
+
     )
 }
 export default MainChat
