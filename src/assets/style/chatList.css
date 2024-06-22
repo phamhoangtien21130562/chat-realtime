@@ -84,3 +84,18 @@
     font-weight: 300;
     margin: auto;
 }
+.no-users {
+    border-radius: 20px;
+    width: 80%;
+    padding: 20px 20px;
+    margin: 20px auto;
+    background: #e2c7e2;
+    color: #584d4a;
+    text-align: center;
+
+
+
+}
+
+
+

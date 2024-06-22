@@ -17,14 +17,16 @@ const ChatList = ({ users }) => {
         <ul>
             {users.map((user, index) => (
                 <li key={index} className="items">
-                    <img src="/img/avata.png" alt="" />
+
+                    <img src={user.type===0 ? "/img/avata.png" : "/img/avatamuti.png"}
+                         alt="" />
                     <div className="texts">
                         <span>{user.name}</span>
                         <p>{formatDateTime(user.actionTime)}</p>
                     </div>
                 </li>
             ))}
-            {users.length === 0 && <p>Không có người dùng nào được tải lên.</p>}
+            {users.length === 0 && <p className="no-users">Chưa có danh sách liên hệ!</p>}
         </ul>
     );
 };

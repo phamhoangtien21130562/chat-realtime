@@ -86,12 +86,16 @@
     flex-direction: column;
     gap: 5px;
 
+
+
+
+
 }
 .mainChat .centerChat .messages .texts p{
     padding: 20px;
     background-color: #8383ef;
     border-radius: 10px;
-    margin: auto;
+    /*margin: auto;*/
 }
 .mainChat .centerChat .messages .texts span{
     font-size: 13px;
@@ -155,4 +159,20 @@
     border-radius: 10px;
     border: none;
 }
+.nameMessage {
+    font-weight: bold;
 
+}
+.realTime {
+    font-style: italic;
+    display: block; /* Đảm bảo phần tử <p> xuống dòng */
+    margin-bottom: 5px; /* Thêm khoảng cách phía dưới nếu cần thiết */
+}
+/*.dateTime {*/
+/*    margin-bottom: 10px; !* Tùy chỉnh giá trị này để tạo khoảng cách *!*/
+/*    display: block;*/
+/*}*/
+/*.avatarImage {*/
+/*    display: block;*/
+/*    margin-top: 10px; !* Tùy chỉnh giá trị này để tạo khoảng cách *!*/
+/*}*/
