@@ -85,11 +85,14 @@
     margin: auto;
 }
 .no-users {
-    color: #FF3300;
-    font-size: 18px;
+    border-radius: 20px;
+    width: 80%;
+    padding: 20px 20px;
+    margin: 20px auto;
+    background: #e2c7e2;
+    color: #584d4a;
     text-align: center;
-    margin-top: 20px;
-    font-style: italic;
+
 
 
 }
