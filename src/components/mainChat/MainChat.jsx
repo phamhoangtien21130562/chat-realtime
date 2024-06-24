@@ -1,6 +1,7 @@
-import '../../assets/style/mainChat.css'
+import '../../assets/style/mainChat.css';
 import EmojiPicker from "emoji-picker-react";
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
+import CryptoJS from "crypto-js";
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -13,36 +14,69 @@ const formatDateTime = (dateTimeString) => {
     return `${datePart} ${timePart}`;
 };
 
-const MainChat = () => {
+const key = CryptoJS.enc.Utf8.parse('1234567891234567');
+const iv = CryptoJS.enc.Utf8.parse('vector khởi tạo');
 
-    const [openEmoji, setOpenEmoji] = useState(false)
-    const [emojiToText, setEmojiToText] = useState("")
+const decryptData = (encryptedData) => {
+    if (!encryptedData) {
+        console.error("Dữ liệu được mã hóa là null hoặc undefined");
+        return null;
+    }
+
+    try {
+        const decrypted = CryptoJS.AES.decrypt(
+            encryptedData,
+            key,
+            { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+        );
+        return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+    } catch (error) {
+        console.error("Lỗi trong quá trình giải mã", error);
+        return null;
+    }
+};
+
+const storedUsername = localStorage.getItem('username');
+const decryptedUsername = decryptData(storedUsername);
+
+const MainChat = ({chatMess,groupName, userType }) => {
+    const [openEmoji, setOpenEmoji] = useState(false);
+    const [emojiToText, setEmojiToText] = useState("");
 
     const endRef = useRef(null);
-    useEffect(() =>{
-        endRef.current?.scrollIntoView({behavior: "smooth"});
-    },[]);
+    useEffect(() => {
+        endRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [chatMess]);
 
     const showEmoji = e => {
         setEmojiToText(prev => prev + e.emoji);
-        setOpenEmoji(false)
+        setOpenEmoji(false);
     };
 
-    return (
+    if (!chatMess || !Array.isArray(chatMess)) {
+        return null;
+    }
 
+    const sortedChatContent = chatMess.sort((a, b) => {
+        const timeA = new Date(a.createAt).getTime();
+        const timeB = new Date(b.createAt).getTime();
+        return timeA - timeB;
+    });
+
+    return (
         <div className='mainChat'>
             <div className="topChat">
                 <div className="user">
-                    <img src="/img/avata.png" alt=""/>
+                    {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
                     <div className="texts">
-                        <span>OzuSus</span>
-                        <p>Helllo World</p>
+                        <span>{groupName}</span>
+                        {/*<p>Hello World</p>*/}
                     </div>
                 </div>
                 <div className="icon">
-                    <img src="/img/phone.png" alt=""/>
-                    <img src="/img/video.png" alt=""/>
-                    <img src="/img/info.png" alt=""/>
+                    <img src="/img/phone.png" alt="" />
+                    <img src="/img/video.png" alt="" />
+                    <img src="/img/info.png" alt="" />
                 </div>
             </div>
             <div className="centerChat">
