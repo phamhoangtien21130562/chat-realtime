@@ -199,9 +199,20 @@ const HomePage = () => {
                         usersList={usersList}
                         setUsersList={setUsersList}
                     />
-                    <ChatList users={usersList}/>
+                    <ChatList users={usersList}
+                              handleUserClick={handleUserClick}
+                              selectedUser={selectedUser}/>
                 </div>
             </div>
+            {showChat ? (
+                <MainChat chatMess={chatMess}
+                          groupName={groupName}
+                          userType={userType}/>
+            ) : (
+                <div className='mainChat'>
+
+                </div>
+            )}
             <MainChat/>
             <RightSideBar/>
         </div>
