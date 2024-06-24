@@ -166,6 +166,17 @@ const HomePage = () => {
                     console.log('Danh sách người dùng:', response.data);
                     setUsersList(response.data);
                 }
+                if (response.status === 'success' && response.event === 'GET_ROOM_CHAT_MES') {
+                    const chatMess = response.data.chatData;
+                    setChatMess(chatMess);
+                    let listUser = [];
+                    if (response.data) {
+                        listUser = response.data.userList;
+                    }
+                    setListUserChatRoom(listUser)
+                    console.log(listUser);
+                    console.log(chatMess);
+                }
             };
 
             setSocket(socket);
