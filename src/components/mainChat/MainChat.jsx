@@ -80,52 +80,56 @@ const MainChat = ({chatMess,groupName, userType }) => {
                 </div>
             </div>
             <div className="centerChat">
-                <div className="messages">
-                    {/*<span>{user.name}</span>*/}
-                    {/*<p>{formatDateTime(user.actionTime)}</p>*/}
+                {sortedChatContent.map((mess, index) => (
+                    <div className="s" key={index}>
+                        {mess.name === decryptedUsername ? (
+                            <div className="messages own">
+                                <div className="texts">
+                                    <p>{mess.mes}</p>
+                                    <span>{formatDateTime(mess.createAt)}</span>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="messages">
+                                <img src="/img/avata.png" alt="" className="avatarImage" />
+                                <div className="texts">
+                                    <span className="nameMessage">{mess.name}</span>
+                                    <p>{mess.mes}</p>
+                                    <span>{formatDateTime(mess.createAt)}</span>
+                                </div>
+                            </div>
+                        )}
 
-                    {/*<p classname="dateTime">01/01/2003 0:10:12 PM</p>*/}
-                    <img src="/img/avata.png" alt=""className="avatarImage"/>
-                    <div className="texts">
-                        <span className="nameMessage">Tien</span>
-                        <p>user1
-                        </p>
-                        <span>01/01/2003 0:10:12 PM</span>
+                        <div ref={endRef}></div>
                     </div>
-
-                </div>
-                <div className="messages own">
-                <div className="texts">
-                    <p>user2
-                        </p>
-                        <span>01/01/2003 0:11:12 PM</span>
-                    </div>
-                </div>
-
-
-                <div ref={endRef}></div>
+                ))}
             </div>
             <div className="bottomChat">
                 <div className="icons">
-                <img src="/img/img.png" alt=""/>
-                    <img src="/img/camera.png" alt=""/>
-                    <img src="/img/mic.png" alt=""/>
+                    <img src="/img/img.png" alt="" />
+                    <img src="/img/camera.png" alt="" />
+                    <img src="/img/mic.png" alt="" />
                 </div>
-                <input type="text" placeholder="Write your message here"
-                       value={emojiToText} onChange={e => setEmojiToText(e.target.value)}
+                <input
+                    type="text"
+                    placeholder="Write your message here"
+                    value={emojiToText}
+                    onChange={e => setEmojiToText(e.target.value)}
                 />
                 <div className="emoji">
-                    <img src="/img/emoji.png" alt=""
-                         onClick={() => setOpenEmoji((prev) => !prev)}
+                    <img
+                        src="/img/emoji.png"
+                        alt=""
+                        onClick={() => setOpenEmoji((prev) => !prev)}
                     />
                     <div className="emojiPicker">
-                        <EmojiPicker open={openEmoji} onEmojiClick={showEmoji}/>
+                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji} />}
                     </div>
                 </div>
                 <button className="sendButton">Send</button>
             </div>
         </div>
-
-    )
-}
-export default MainChat
+    );
+};
+console.log(decryptedUsername);
+export default MainChat;
