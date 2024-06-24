@@ -27,6 +27,39 @@ const decryptData = (encryptedData) => {
 const HomePage = () => {
     const [socket, setSocket] = useState(null);
     const [usersList, setUsersList] = useState([]);
+    const [showChat, setShowChat] = useState(false);
+    const [chatMess, setChatMess] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [groupName, setGroupName] = useState("");
+    const [userType, setUserType] = useState(null);
+    const [isChatVisible, setIsChatVisible] = useState(true);
+    const [typeSend, setTypeSend] = useState(null);
+    const [listUserChatRoom, setListUserChatRoom] = useState([]);
+
+    function handleUserClick(userName, type) {
+        setSelectedUser(userName);
+        setGroupName(userName);
+        setUserType(type);
+        setShowChat(true);
+        setIsChatVisible(true);
+        console.log(type)
+        console.log(userName);
+        if (type == 1) {
+            setTypeSend("room");
+            const requestRoomChatMess = {
+                action: "onchat",
+                data: {
+                    event: "GET_ROOM_CHAT_MES",
+                    data: {
+                        name: userName,
+                        page: 1
+                    },
+                },
+            };
+            socket.send(JSON.stringify(requestRoomChatMess));
+            console.log("Đã gửi yêu cầu get room chat mes");
+        }
+    }
 
     function handleCreateRoom(roomName) {
         const requestcreateRoom = {
