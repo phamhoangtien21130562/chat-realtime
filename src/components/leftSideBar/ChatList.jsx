@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../assets/style/chatList.css';
 
 const formatDateTime = (dateTimeString) => {
@@ -12,11 +12,33 @@ const formatDateTime = (dateTimeString) => {
     return `${datePart} ${timePart}`;
 };
 
-const ChatList = ({ users }) => {
+const ChatList = ({ users,handleUserClick, selectedUser, searchQuery }) => {
+
+    const [showChat, setShowChat] = useState(false);
+    const [filteredUserList, setFilteredUserList] = useState([]);
+
+    useEffect(() => {
+        if (searchQuery !== undefined && searchQuery !== "") {
+            const filteredList = users.filter(
+                (user) =>
+                    user.name !== undefined &&
+                    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredUserList(filteredList);
+        } else {
+            setFilteredUserList(users);
+        }
+    }, [users, searchQuery]);
+    function handleUserItemClick(userName, userType) {
+        handleUserClick(userName, userType);
+        setShowChat(true);
+    }
+
     return (
         <ul>
             {users.map((user, index) => (
-                <li key={index} className="items">
+                <li key={index} className="items"
+                    onClick={() => handleUserItemClick(user.name, user.type)}>
 
                     <img src={user.type===0 ? "/img/avata.png" : "/img/avatamuti.png"}
                          alt="" />
