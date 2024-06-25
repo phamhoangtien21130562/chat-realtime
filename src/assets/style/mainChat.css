@@ -96,6 +96,7 @@
     background-color: #8383ef;
     border-radius: 10px;
     /*margin: auto;*/
+    word-break: break-word;
 }
 .mainChat .centerChat .messages .texts span{
     font-size: 13px;
@@ -108,12 +109,16 @@
     object-fit: cover;
 }
 .mainChat .centerChat .own{
+    width: 60%;
+    float: right;
     align-self: flex-end;
-    /*display: flex;*/
-    /*flex-direction: column;*/
+    display: flex;
+    flex-direction: column;
 }
 .mainChat .centerChat .own .texts p{
+    text-align: right;
     background-color: #37d9af;
+    word-break: break-word;
 }
 .mainChat .bottomChat{
     padding: 20px;
