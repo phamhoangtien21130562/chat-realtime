@@ -190,7 +190,10 @@ const HomePage = () => {
                     console.log(listUser);
                     console.log(chatMess);
                 }
-               
+                if (response.status === 'success' && response.event === 'GET_PEOPLE_CHAT_MES') {
+                    const chatMess = response.data;
+                    setChatMess(chatMess);
+                    console.log(chatMess)
                 }
             };
 
