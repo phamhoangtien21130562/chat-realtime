@@ -58,6 +58,19 @@ const HomePage = () => {
             };
             socket.send(JSON.stringify(requestRoomChatMess));
             console.log("Đã gửi yêu cầu get room chat mes");
+        } else {
+            setTypeSend("people");
+            const requestRoomChatMess = {
+                action: "onchat",
+                data: {
+                    event: "GET_PEOPLE_CHAT_MES",
+                    data: {
+                        name: userName,
+                        page: 1
+                    },
+                },
+            };
+            socket.send(JSON.stringify(requestRoomChatMess));
         }
     }
 
@@ -176,6 +189,8 @@ const HomePage = () => {
                     setListUserChatRoom(listUser)
                     console.log(listUser);
                     console.log(chatMess);
+                }
+               
                 }
             };
 
