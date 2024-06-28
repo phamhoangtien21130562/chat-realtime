@@ -116,6 +116,37 @@ const HomePage = () => {
         socket.send(JSON.stringify(userList));
     }
 
+    function handleSendMessage(message) {
+        let messEncode = encodeURI(message);
+        let  mes = messEncode.replace(/%20/g," ");
+        const chatData = {
+            action: 'onchat',
+            data: {
+                event: 'SEND_CHAT',
+                data: {
+                    type: typeSend,
+                    to: selectedUser,
+                    mes: mes,
+                }
+            },
+        };
+        socket.send(JSON.stringify(chatData));
+        console.log("Đã gửi tin nhắn lên cho server");
+        if (userType == 1) {
+            const requestRoomChatMessage = {
+                action: "onchat",
+                data: {
+                    event: "GET_ROOM_CHAT_MES",
+                    data: {
+                        name: selectedUser,
+                        page: 1,
+                    },
+                },
+            };
+            socket.send(JSON.stringify(requestRoomChatMessage));
+        }
+    }
+
     useEffect(() => {
         // Khởi tạo kết nối với server qua websocket
         const socket = new WebSocket("ws://140.238.54.136:8080/chat/chat");
@@ -180,20 +211,36 @@ const HomePage = () => {
                     setUsersList(response.data);
                 }
                 if (response.status === 'success' && response.event === 'GET_ROOM_CHAT_MES') {
-                    const chatMess = response.data.chatData;
+                    const chatMess = response.data.chatData.map(mes => ({
+                        ...mes,
+                        mes: decodeURIComponent(mes.mes)
+                    }));
+
                     setChatMess(chatMess);
+
                     let listUser = [];
                     if (response.data) {
                         listUser = response.data.userList;
                     }
-                    setListUserChatRoom(listUser)
+                    setListUserChatRoom(listUser);
+
                     console.log(listUser);
                     console.log(chatMess);
                 }
+                if (response.status === 'success' && response.event === 'SEND_CHAT') {
+                    const receivedMessage = response.data;
+                    setChatMess((prevChatMess) => [...prevChatMess, receivedMessage]);
+
+                }
                 if (response.status === 'success' && response.event === 'GET_PEOPLE_CHAT_MES') {
-                    const chatMess = response.data;
+                    // Giải mã các tin nhắn từ URL encoding sang UTF-8
+                    const chatMess = response.data.map(mes => ({
+                        ...mes,
+                        mes: decodeURIComponent(mes.mes)
+                    }));
+
                     setChatMess(chatMess);
-                    console.log(chatMess)
+                    console.log(chatMess);
                 }
             };
 
@@ -225,7 +272,8 @@ const HomePage = () => {
             {showChat ? (
                 <MainChat chatMess={chatMess}
                           groupName={groupName}
-                          userType={userType}/>
+                          userType={userType}
+                          handleSendMessage={handleSendMessage}/>
             ) : (
                 <div className='mainChat'>
 
