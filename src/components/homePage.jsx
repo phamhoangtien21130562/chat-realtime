@@ -144,18 +144,6 @@ const HomePage = () => {
                 },
             };
             socket.send(JSON.stringify(requestRoomChatMessage));
-        }else {
-            const requestRoomChatMessage = {
-                action: "onchat",
-                data: {
-                    event: "GET_PEOPLE_CHAT_MES",
-                    data: {
-                        name: selectedUser,
-                        page: 1,
-                    },
-                },
-            };
-            socket.send(JSON.stringify(requestRoomChatMessage));
         }
     }
 
