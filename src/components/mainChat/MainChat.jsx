@@ -2,6 +2,7 @@ import '../../assets/style/mainChat.css';
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
+import * as events from "events";
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -39,9 +40,11 @@ const decryptData = (encryptedData) => {
 const storedUsername = localStorage.getItem('username');
 const decryptedUsername = decryptData(storedUsername);
 
-const MainChat = ({chatMess,groupName, userType }) => {
+const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     const [openEmoji, setOpenEmoji] = useState(false);
     const [emojiToText, setEmojiToText] = useState("");
+    const [message, setMessage] = useState("");
+
 
     const endRef = useRef(null);
     useEffect(() => {
@@ -62,6 +65,16 @@ const MainChat = ({chatMess,groupName, userType }) => {
         const timeB = new Date(b.createAt).getTime();
         return timeA - timeB;
     });
+
+    function handleChange(event) {
+        setMessage(event.target.value);
+    }
+    function handleClickSend() {
+        if (message.trim() !== "") {
+            handleSendMessage(message.trim());
+            setMessage("");
+        }
+    }
 
     return (
         <div className='mainChat'>
@@ -114,7 +127,14 @@ const MainChat = ({chatMess,groupName, userType }) => {
                     type="text"
                     placeholder="Write your message here"
                     value={emojiToText}
+                    value={message}
                     onChange={e => setEmojiToText(e.target.value)}
+                    onChange={handleChange}
+                    onKeyDown={(event)=>{
+                        if (event.key === "Enter") {
+                            handleClickSend();
+                        }
+                    }}
                 />
                 <div className="emoji">
                     <img
@@ -126,7 +146,7 @@ const MainChat = ({chatMess,groupName, userType }) => {
                         {openEmoji && <EmojiPicker onEmojiClick={showEmoji} />}
                     </div>
                 </div>
-                <button className="sendButton">Send</button>
+                <button onClick={handleClickSend} className="sendButton">Send</button>
             </div>
         </div>
     );
