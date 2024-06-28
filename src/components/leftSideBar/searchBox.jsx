@@ -39,7 +39,7 @@ const SearchBox = ({ handleCreateRoom, handleJoinRoom, usersList, setUsersList }
                 setUsersList(updatedUsers);
             } else {
                 // If userName does not exist, add it to the top with the current date and time
-                const newUser = { name: userName, actionTime: currentDateTime };
+                const newUser = { name: userName, actionTime: currentDateTime, type: 0 }; // Thêm type: 0 vào đối tượng newUser
                 const updatedUsers = [newUser, ...usersList];
                 setUsersList(updatedUsers);
             }

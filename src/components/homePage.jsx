@@ -58,6 +58,19 @@ const HomePage = () => {
             };
             socket.send(JSON.stringify(requestRoomChatMess));
             console.log("Đã gửi yêu cầu get room chat mes");
+        } else {
+            setTypeSend("people");
+            const requestRoomChatMess = {
+                action: "onchat",
+                data: {
+                    event: "GET_PEOPLE_CHAT_MES",
+                    data: {
+                        name: userName,
+                        page: 1
+                    },
+                },
+            };
+            socket.send(JSON.stringify(requestRoomChatMess));
         }
     }
 
@@ -212,6 +225,11 @@ const HomePage = () => {
                     const receivedMessage = response.data;
                     setChatMess((prevChatMess) => [...prevChatMess, receivedMessage]);
 
+                }
+                if (response.status === 'success' && response.event === 'GET_PEOPLE_CHAT_MES') {
+                    const chatMess = response.data;
+                    setChatMess(chatMess);
+                    console.log(chatMess)
                 }
             };
 
