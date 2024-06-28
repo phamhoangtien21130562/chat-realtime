@@ -144,6 +144,18 @@ const HomePage = () => {
                 },
             };
             socket.send(JSON.stringify(requestRoomChatMessage));
+        }else {
+            const requestRoomChatMessage = {
+                action: "onchat",
+                data: {
+                    event: "GET_PEOPLE_CHAT_MES",
+                    data: {
+                        name: selectedUser,
+                        page: 1,
+                    },
+                },
+            };
+            socket.send(JSON.stringify(requestRoomChatMessage));
         }
     }
 
@@ -211,13 +223,19 @@ const HomePage = () => {
                     setUsersList(response.data);
                 }
                 if (response.status === 'success' && response.event === 'GET_ROOM_CHAT_MES') {
-                    const chatMess = response.data.chatData;
+                    const chatMess = response.data.chatData.map(mes => ({
+                        ...mes,
+                        mes: decodeURIComponent(mes.mes)
+                    }));
+
                     setChatMess(chatMess);
+
                     let listUser = [];
                     if (response.data) {
                         listUser = response.data.userList;
                     }
-                    setListUserChatRoom(listUser)
+                    setListUserChatRoom(listUser);
+
                     console.log(listUser);
                     console.log(chatMess);
                 }
@@ -227,9 +245,14 @@ const HomePage = () => {
 
                 }
                 if (response.status === 'success' && response.event === 'GET_PEOPLE_CHAT_MES') {
-                    const chatMess = response.data;
+                    // Giải mã các tin nhắn từ URL encoding sang UTF-8
+                    const chatMess = response.data.map(mes => ({
+                        ...mes,
+                        mes: decodeURIComponent(mes.mes)
+                    }));
+
                     setChatMess(chatMess);
-                    console.log(chatMess)
+                    console.log(chatMess);
                 }
             };
 
