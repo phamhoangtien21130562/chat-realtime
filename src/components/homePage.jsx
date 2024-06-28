@@ -103,6 +103,37 @@ const HomePage = () => {
         socket.send(JSON.stringify(userList));
     }
 
+    function handleSendMessage(message) {
+        let messEncode = encodeURI(message);
+        let  mes = messEncode.replace(/%20/g," ");
+        const chatData = {
+            action: 'onchat',
+            data: {
+                event: 'SEND_CHAT',
+                data: {
+                    type: typeSend,
+                    to: selectedUser,
+                    mes: mes,
+                }
+            },
+        };
+        socket.send(JSON.stringify(chatData));
+        console.log("Đã gửi tin nhắn lên cho server");
+        if (userType == 1) {
+            const requestRoomChatMessage = {
+                action: "onchat",
+                data: {
+                    event: "GET_ROOM_CHAT_MES",
+                    data: {
+                        name: selectedUser,
+                        page: 1,
+                    },
+                },
+            };
+            socket.send(JSON.stringify(requestRoomChatMessage));
+        }
+    }
+
     useEffect(() => {
         // Khởi tạo kết nối với server qua websocket
         const socket = new WebSocket("ws://140.238.54.136:8080/chat/chat");
@@ -177,6 +208,11 @@ const HomePage = () => {
                     console.log(listUser);
                     console.log(chatMess);
                 }
+                if (response.status === 'success' && response.event === 'SEND_CHAT') {
+                    const receivedMessage = response.data;
+                    setChatMess((prevChatMess) => [...prevChatMess, receivedMessage]);
+
+                }
             };
 
             setSocket(socket);
@@ -207,7 +243,8 @@ const HomePage = () => {
             {showChat ? (
                 <MainChat chatMess={chatMess}
                           groupName={groupName}
-                          userType={userType}/>
+                          userType={userType}
+                          handleSendMessage={handleSendMessage}/>
             ) : (
                 <div className='mainChat'>
 
