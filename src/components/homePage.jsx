@@ -251,13 +251,20 @@ const HomePage = () => {
                 if (response.status === 'success' && response.event === 'SEND_CHAT') {
                     const receivedMessage = response.data;
                     setChatMess((prevChatMess) => [...prevChatMess, receivedMessage]);
-                    const userList = {
-                        action: 'onchat',
-                        data: {
-                            event: 'GET_USER_LIST',
-                        },
-                    };
-                    socket.send(JSON.stringify(userList));
+                    if (receivedMessage.type ===1 ){
+                        const userList = {
+                            action: 'onchat',
+                            data: {
+                                event: 'GET_USER_LIST',
+                            },
+                        };
+                        socket.send(JSON.stringify(userList));
+                    }else{
+                        setUsersList((prevUsersList) => {
+                            const updatedList = prevUsersList.filter(user => user.name !== receivedMessage.name);
+                            return [receivedMessage, ...updatedList];
+                        });
+                    }
                 }
                 if (response.status === 'success' && response.event === 'GET_PEOPLE_CHAT_MES') {
                     // Giải mã các tin nhắn từ URL encoding sang UTF-8
@@ -265,7 +272,6 @@ const HomePage = () => {
                         ...mes,
                         mes: decodeURIComponent(mes.mes)
                     }));
-
                     setChatMess(chatMess);
                     console.log(chatMess);
                 }
