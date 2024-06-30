@@ -151,8 +151,8 @@ const HomePage = () => {
                 },
             };
             socket.send(JSON.stringify(requestRoomChatMessage));
-        }else {
-            if (userType == 0) {
+        }else{
+            if(userType == 0){
                 const requestRoomChatMessage = {
                     action: "onchat",
                     data: {
