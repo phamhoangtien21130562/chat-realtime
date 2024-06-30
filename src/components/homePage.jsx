@@ -3,7 +3,6 @@ import withAuth from './withAuth'; // Import HOC withAuth
 import '../assets/style/homePage.css'; // Import CSS file
 import LeftSideBar from "./leftSideBar/LeftSideBar";
 import MainChat from "./mainChat/MainChat";
-import RightSideBar from "./rightSideBar/RightSideBar";
 import UserInfo from "./leftSideBar/UserInfo";
 import ChatList from "./leftSideBar/ChatList";
 import SearchBox from "./leftSideBar/searchBox";
@@ -280,7 +279,7 @@ const HomePage = () => {
                 </div>
             )}
             <MainChat/>
-            <RightSideBar/>
+
         </div>
     );
 };

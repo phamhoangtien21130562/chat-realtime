@@ -24,3 +24,22 @@
     height: 20px;
     cursor: pointer;
 }
+/* userInfo.css */
+
+.logoutButton {
+    background-color: #008000; /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Không có viền */
+    padding: 10px 20px; /* Kích thước nút */
+    text-align: center; /* Căn giữa nội dung */
+    text-decoration: none; /* Bỏ gạch chân cho text */
+    display: inline-block;
+    font-size: 16px; /* Kích cỡ chữ */
+    cursor: pointer; /* Con trỏ chuột khi rê vào */
+    border-radius: 5px; /* Bo tròn góc */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển đổi màu nền */
+}
+
+.logoutButton:hover {
+    background-color: #df362c; /* Màu nền khi di chuột vào */
+}
