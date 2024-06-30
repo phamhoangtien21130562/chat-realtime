@@ -68,7 +68,7 @@ const UserInfo = () => {
             </div>
             <div className="icons">
                 {/* Nút đăng xuất */}
-                <button onClick={handleLogout} className="logoutButton">Đăng xuất</button>
+                <button onClick={handleLogout} className="logoutButton">Logout</button>
             </div>
             {/* Thông báo đăng xuất */}
             {logoutNotification && (

@@ -22,3 +22,21 @@ body{
     border: 5px solid rgba(255, 255, 255, 0.13);
     display: flex;
 }
+.welcome-message {
+    background-color: #2E8B57; /* Màu nền của khung chờ */
+    border-radius: 60px; /* Bo góc */
+    padding: 40px; /* Khoảng cách lề bên trong */
+    text-align: center; /* Căn giữa nội dung */
+    width: 1000px; /* Chiều dài của khung chờ */
+    height: 100px; /* Chiều cao của khung chờ */
+    position: absolute; /* Đặt vị trí tuyệt đối để căn giữa */
+    top: 50%; /* Đặt vị trí phía trên ở giữa */
+    left: 66.5%; /* Đặt vị trí phía bên trái ở giữa */
+    transform: translate(-50%, -50%); /* Dịch chuyển khung chờ ngược lại 50% chiều rộng và chiều cao của nó */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+    font-size: 24px; /* Kích thước chữ */
+
+}
+
+
+
