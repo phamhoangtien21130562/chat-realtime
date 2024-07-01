@@ -295,34 +295,8 @@ const HomePage = () => {
                     <div className="welcome-message">
                         <p>Welcome to appchat!</p>
                         <p>Please choose a subject to chat with!</p>
-                        <i className="fas fa-comment"></i> <i className="fas fa-comment"></i> <i
-                        className="fas fa-comment"></i>
+                        <i className="fas fa-comment"></i>
                     </div>
-                    <div className='mainChat'>
-                        <div className="bottomChat">
-                            <div className="icons">
-                                <img src="/img/img.png" alt=""/>
-                                <img src="/img/camera.png" alt=""/>
-                                <img src="/img/mic.png" alt=""/>
-                            </div>
-                            <input
-                                type="text"
-                                placeholder="Write your message here"
-                            />
-                            <div className="emoji">
-                                <img
-                                    src="/img/emoji.png"
-                                    alt=""
-                                />
-                                <div className="emojiPicker">
-                                    {/* Placeholder for EmojiPicker component */}
-                                </div>
-                            </div>
-                            <button className="sendButton">Send</button>
-                        </div>
-                    </div>
-
-
                 </div>
 
 
