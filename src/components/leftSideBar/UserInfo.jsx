@@ -38,7 +38,7 @@ const UserInfo = () => {
 
     const handleLogout = () => {
         // Xóa thông tin người dùng trong localStorage
-        localStorage.removeItem('username');
+        localStorage.clear();
 
         // Đặt thông báo đăng xuất thành công và điều hướng về trang đăng nhập
         setLogoutNotification('Bạn đã đăng xuất thành công!');
