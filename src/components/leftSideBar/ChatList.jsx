@@ -37,7 +37,9 @@ const ChatList = ({ users,handleUserClick, selectedUser, searchQuery }) => {
     return (
         <ul>
             {users.map((user, index) => (
-                <li key={index} className="items"
+                <li key={index} className={`items ${
+                    user.name === selectedUser ? "selected" : ""
+                }`}
                     onClick={() => handleUserItemClick(user.name, user.type)}>
 
                     <img src={user.type===0 ? "/img/avata.png" : "/img/avatamuti.png"}

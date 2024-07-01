@@ -22,3 +22,22 @@ body{
     border: 5px solid rgba(255, 255, 255, 0.13);
     display: flex;
 }
+.welcome-message {
+    flex: 2;
+    border-left: 1px solid #655d72;
+    border-right: 1px solid #655d72;
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    background-color: #2E8B57;
+    border-radius: 80px;
+}
+
+
+
+

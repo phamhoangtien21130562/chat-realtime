@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../assets/style/userInfo.css';
 import CryptoJS from 'crypto-js';
+import { useNavigate } from 'react-router-dom';
 
 const key = CryptoJS.enc.Utf8.parse('1234567891234567');
 const iv = CryptoJS.enc.Utf8.parse('vector khởi tạo');
@@ -17,6 +18,8 @@ const decryptData = (encryptedData) => {
 
 const UserInfo = () => {
     const [decodedUsername, setDecodedUsername] = useState('');
+    const [logoutNotification, setLogoutNotification] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Kiểm tra và giải mã thông tin người dùng từ localStorage
@@ -33,6 +36,25 @@ const UserInfo = () => {
         }
     }, []);
 
+    const handleLogout = () => {
+        // Xóa thông tin người dùng trong localStorage
+        localStorage.clear();
+
+        // Đặt thông báo đăng xuất thành công và điều hướng về trang đăng nhập
+        setLogoutNotification('Bạn đã đăng xuất thành công!');
+        navigate('/');
+    };
+
+    useEffect(() => {
+        // Xóa thông báo sau 3 giây
+        if (logoutNotification !== '') {
+            const timeout = setTimeout(() => {
+                setLogoutNotification('');
+            }, 3000);
+            return () => clearTimeout(timeout);
+        }
+    }, [logoutNotification]);
+
     return (
         <div className='userInfo'>
             <div className="user">
@@ -44,8 +66,16 @@ const UserInfo = () => {
                 <img src="/img/video.png" alt=""/>
                 <img src="/img/edit.png" alt=""/>
             </div>
+            <div className="icons">
+                {/* Nút đăng xuất */}
+                <button onClick={handleLogout} className="logoutButton">Logout</button>
+            </div>
+            {/* Thông báo đăng xuất */}
+            {logoutNotification && (
+                <div className="logoutNotification">{logoutNotification}</div>
+            )}
         </div>
     );
 };
 
-export default UserInfo;
+export default UserInfo;  // Câu lệnh export nên được đặt ở mức đỉnh của file

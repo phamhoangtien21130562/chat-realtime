@@ -3,7 +3,6 @@ import withAuth from './withAuth'; // Import HOC withAuth
 import '../assets/style/homePage.css'; // Import CSS file
 import LeftSideBar from "./leftSideBar/LeftSideBar";
 import MainChat from "./mainChat/MainChat";
-import RightSideBar from "./rightSideBar/RightSideBar";
 import UserInfo from "./leftSideBar/UserInfo";
 import ChatList from "./leftSideBar/ChatList";
 import SearchBox from "./leftSideBar/searchBox";
@@ -310,11 +309,20 @@ const HomePage = () => {
                           handleSendMessage={handleSendMessage}/>
             ) : (
                 <div className='mainChat'>
-
+                    <link rel="stylesheet"
+                          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+                          integrity="sha512-..." crossOrigin="anonymous"/>
+                    <div className="welcome-message">
+                        <p>Welcome to appchat!</p>
+                        <p>Please choose a subject to chat with!</p>
+                        <i className="fas fa-comment"></i>
+                    </div>
                 </div>
+
+
             )}
             <MainChat/>
-            <RightSideBar/>
+
         </div>
     );
 };
