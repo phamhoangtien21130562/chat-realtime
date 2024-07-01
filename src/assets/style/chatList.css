@@ -96,6 +96,13 @@
 
 
 }
+.items.selected {
+    border: 2px solid #2E8B57; /* Viền nổi bật */
+    border-radius: 5px; /* Bo góc viền */
+    cursor: pointer; /* Con trỏ khi rê chuột */
+}
+
+
 
 
 
