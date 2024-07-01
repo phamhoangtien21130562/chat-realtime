@@ -250,6 +250,7 @@ const HomePage = () => {
                 }
                 if (response.status === 'success' && response.event === 'SEND_CHAT') {
                     const receivedMessage = response.data;
+                    receivedMessage.mes = decodeURIComponent(receivedMessage.mes);
                     setChatMess((prevChatMess) => [...prevChatMess, receivedMessage]);
                     if (receivedMessage.type ===1 ){
                         const userList = {
@@ -262,7 +263,7 @@ const HomePage = () => {
                     }else{
                         setUsersList((prevUsersList) => {
                             const updatedList = prevUsersList.filter(user => user.name !== receivedMessage.name);
-                            return [receivedMessage, ...updatedList];
+                            return [{ name: receivedMessage.name, type: receivedMessage.type, actionTime: new Date().toISOString() }, ...updatedList];
                         });
                     }
                 }
