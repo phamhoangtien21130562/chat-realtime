@@ -131,6 +131,13 @@ const HomePage = () => {
         };
         socket.send(JSON.stringify(chatData));
         console.log("Đã gửi tin nhắn lên cho server");
+        const userList = {
+            action: 'onchat',
+            data: {
+                event: 'GET_USER_LIST',
+            },
+        };
+        socket.send(JSON.stringify(userList));
         if (userType == 1) {
             const requestRoomChatMessage = {
                 action: "onchat",
@@ -242,8 +249,22 @@ const HomePage = () => {
                 }
                 if (response.status === 'success' && response.event === 'SEND_CHAT') {
                     const receivedMessage = response.data;
+                    receivedMessage.mes = decodeURIComponent(receivedMessage.mes);
                     setChatMess((prevChatMess) => [...prevChatMess, receivedMessage]);
-
+                    if (receivedMessage.type ===1 ){
+                        const userList = {
+                            action: 'onchat',
+                            data: {
+                                event: 'GET_USER_LIST',
+                            },
+                        };
+                        socket.send(JSON.stringify(userList));
+                    }else{
+                        setUsersList((prevUsersList) => {
+                            const updatedList = prevUsersList.filter(user => user.name !== receivedMessage.name);
+                            return [receivedMessage, ...updatedList];
+                        });
+                    }
                 }
                 if (response.status === 'success' && response.event === 'GET_PEOPLE_CHAT_MES') {
                     // Giải mã các tin nhắn từ URL encoding sang UTF-8
@@ -251,7 +272,6 @@ const HomePage = () => {
                         ...mes,
                         mes: decodeURIComponent(mes.mes)
                     }));
-
                     setChatMess(chatMess);
                     console.log(chatMess);
                 }
