@@ -262,7 +262,7 @@ const HomePage = () => {
                     }else{
                         setUsersList((prevUsersList) => {
                             const updatedList = prevUsersList.filter(user => user.name !== receivedMessage.name);
-                            return [{ name: receivedMessage.name, type: receivedMessage.type, actionTime: new Date().toISOString() }, ...updatedList];
+                            return [receivedMessage, ...updatedList];
                         });
                     }
                 }
