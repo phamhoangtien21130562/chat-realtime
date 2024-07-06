@@ -2,7 +2,7 @@ import '../../assets/style/mainChat.css';
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
-import html2canvas from 'html2canvas'; // Thêm import này
+import html2canvas from 'html2canvas';
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -41,9 +41,8 @@ const decryptData = (encryptedData) => {
 const storedUsername = localStorage.getItem('username');
 const decryptedUsername = decryptData(storedUsername);
 
-const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
+const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     const [openEmoji, setOpenEmoji] = useState(false);
-    const [emojiToText, setEmojiToText] = useState("");
     const [message, setMessage] = useState("");
 
     const endRef = useRef(null);
@@ -52,7 +51,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     }, [chatMess]);
 
     const showEmoji = e => {
-        setEmojiToText(prev => prev + e.emoji);
+        setMessage(prev => prev + e.emoji);
         setOpenEmoji(false);
     };
 
@@ -69,6 +68,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     function handleChange(event) {
         setMessage(event.target.value);
     }
+
     function handleClickSend() {
         if (message.trim() !== "") {
             handleSendMessage(message.trim());
@@ -89,13 +89,32 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         }
     };
 
+    const handleMicClick = () => {
+        const recognition = new window.webkitSpeechRecognition();
+        recognition.lang = 'vi-VN';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            setMessage(prevMessage => prevMessage + transcript);
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error", event.error);
+        };
+
+        recognition.start();
+    };
+
     let prevName = "";
 
     return (
         <div className='mainChat'>
             <div className="topChat">
                 <div className="user">
-                    {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
+                    {userType === 0 ? (<img src="/img/avata.png" alt="" />) : (<img src="/img/avatamuti.png" alt="" />)}
                     <div className="texts">
                         <span>{groupName}</span>
                     </div>
@@ -125,7 +144,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                             ) : (
                                 <div className="messages">
                                     <img src="/img/avata.png" alt=""
-                                         className={`avatarImage ${isSameUser ? 'hidden' : ''}`}/>
+                                         className={`avatarImage ${isSameUser ? 'hidden' : ''}`} />
                                     <div className="texts">
                                         {isFirstMessage && <span className="nameMessage">{mess.name}</span>}
                                         <p>{mess.mes}</p>
@@ -140,16 +159,14 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
             </div>
             <div className="bottomChat">
                 <div className="icons">
-                    <img src="/img/img.png" alt=""/>
+                    <img src="/img/img.png" alt="" />
                     <img src="/img/camera.png" alt="" onClick={handleScreenshotClick} />
-                    <img src="/img/mic.png" alt=""/>
+                    <img src="/img/mic.png" alt="" onClick={handleMicClick} />
                 </div>
                 <input
                     type="text"
                     placeholder="Write your message here"
-                    value={emojiToText}
                     value={message}
-                    onChange={e => setEmojiToText(e.target.value)}
                     onChange={handleChange}
                     onKeyDown={(event) => {
                         if (event.key === "Enter") {
@@ -164,7 +181,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                         onClick={() => setOpenEmoji((prev) => !prev)}
                     />
                     <div className="emojiPicker">
-                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji}/>}
+                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji} />}
                     </div>
                 </div>
                 <button onClick={handleClickSend} className="sendButton">Send</button>
