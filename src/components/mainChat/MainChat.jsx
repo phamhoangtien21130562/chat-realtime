@@ -50,7 +50,6 @@ const decryptedUsername = decryptData(storedUsername);
 
 const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     const [openEmoji, setOpenEmoji] = useState(false);
-    const [emojiToText, setEmojiToText] = useState("");
     const [message, setMessage] = useState("");
     const [isRecording, setIsRecording] = useState(false);
 
@@ -60,7 +59,7 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     }, [chatMess]);
 
     const showEmoji = e => {
-        setEmojiToText(prev => prev + e.emoji);
+        setMessage(prev => prev + e.emoji);
         setOpenEmoji(false);
     };
 
@@ -76,14 +75,12 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
 
     function handleChange(event) {
         setMessage(event.target.value);
-        setEmojiToText(event.target.value); // Cập nhật emojiToText cùng với message
     }
 
     function handleClickSend() {
         if (message.trim() !== "") {
             handleSendMessage(message.trim());
             setMessage("");
-            setEmojiToText(""); // Xóa emojiToText sau khi gửi
         }
     }
 
@@ -100,7 +97,6 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         setMessage(prevMessage => prevMessage + " " + transcript);
-        setEmojiToText(prevEmojiToText => prevEmojiToText + " " + transcript);
         setIsRecording(false);
     };
 
@@ -170,11 +166,8 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
                 <input
                     type="text"
                     placeholder="Write your message here"
-                    value={emojiToText}
-                    onChange={e => {
-                        setEmojiToText(e.target.value);
-                        handleChange(e);
-                    }}
+                    value={message}
+                    onChange={handleChange}
                     onKeyDown={(event) => {
                         if (event.key === "Enter") {
                             handleClickSend();
