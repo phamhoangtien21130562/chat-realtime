@@ -75,11 +75,13 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
 
     function handleChange(event) {
         setMessage(event.target.value);
+        setEmojiToText(event.target.value); // Cập nhật emojiToText cùng với message
     }
     function handleClickSend() {
         if (message.trim() !== "") {
             handleSendMessage(message.trim());
             setMessage("");
+            setEmojiToText(""); // Xóa emojiToText sau khi gửi
         }
     }
 
@@ -96,6 +98,7 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         setMessage(prevMessage => prevMessage + " " + transcript);
+        setEmojiToText(prevEmojiToText => prevEmojiToText + " " + transcript);
         setIsRecording(false);
     };
 
