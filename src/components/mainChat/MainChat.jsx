@@ -5,6 +5,7 @@ import CryptoJS from "crypto-js";
 import * as events from "events";
 import FacebookPost from "../FacebookPost";
 
+
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
     dateTime.setHours(dateTime.getHours() + 7);
@@ -87,6 +88,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                     {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
                     <div className="texts">
                         <span>{groupName}</span>
+                        {/*<p>Hello World</p>*/}
                     </div>
                 </div>
                 <div className="icon">
@@ -107,33 +109,34 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                             {mess.name === decryptedUsername ? (
                                 <div className="messages own">
                                     <div className="texts">
-                                        {mess.mes.includes("https://www.youtube.com/watch") ? (
-                                            <div>
-                                                <a href={mess.mes} className="link_mes_own" target="_blank">{mess.mes}</a>
-                                                <iframe className="iframe_youtube"
-                                                        width="914"
-                                                        height="514"
-                                                        // src={getYoutubeEmbedUrl(mess.mes)}
-                                                        title="Video Player"
-                                                        frameBorder="0"
-                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                                        referrerPolicy="strict-origin-when-cross-origin"
-                                                        allowFullScreen
-                                                ></iframe>
-                                            </div>
-                                        ) : mess.mes.includes("base64") ? (
-                                            <p className="pic_own">
-                                                <img src={mess.mes} alt="Received Image"/>
-                                            </p>
-                                        ) : mess.mes.includes("https://www.facebook.com") ? (
-                                            <FacebookPost href={mess.mes}  type="post" />
-                                        ) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (
-                                            <p className="pic_own">
-                                                <img src={mess.mes} alt="Received Image"/>
-                                            </p>
-                                        ) : (
-                                            <a className="mes">{mess.mes}</a>
-                                        )}
+                                        <p>{mess.mes}</p>
+                                        {/*{mess.mes.includes("https://www.youtube.com/watch") ? (*/}
+                                        {/*    <div>*/}
+                                        {/*        <a href={mess.mes} className="link_mes_own" target="_blank">{mess.mes}</a>*/}
+                                        {/*        <iframe className="iframe_youtube"*/}
+                                        {/*                width="914"*/}
+                                        {/*                height="514"*/}
+                                        {/*                // src={getYoutubeEmbedUrl(mess.mes)}*/}
+                                        {/*                title="Video Player"*/}
+                                        {/*                frameBorder="0"*/}
+                                        {/*                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"*/}
+                                        {/*                referrerPolicy="strict-origin-when-cross-origin"*/}
+                                        {/*                allowFullScreen*/}
+                                        {/*        ></iframe>*/}
+                                        {/*    </div>*/}
+                                        {/*) : mess.mes.includes("base64") ? (*/}
+                                        {/*    <p className="pic_own">*/}
+                                        {/*        <img src={mess.mes} alt="Received Image"/>*/}
+                                        {/*    </p>*/}
+                                        {/*) : mess.mes.includes("https://www.facebook.com") ? (*/}
+                                        {/*    <FacebookPost href={mess.mes}  type="post" />*/}
+                                        {/*) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (*/}
+                                        {/*    <p className="pic_own">*/}
+                                        {/*        <img src={mess.mes} alt="Received Image"/>*/}
+                                        {/*    </p>*/}
+                                        {/*) : (*/}
+                                        {/*    <a className="mes">{mess.mes}</a>*/}
+                                        {/*)}*/}
                                         {isLastMessage && <span>{formatDateTime(mess.createAt)}</span>}
                                     </div>
                                 </div>
@@ -142,32 +145,10 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                     <img src="/img/avata.png" alt=""
                                          className={`avatarImage ${isSameUser ? 'hidden' : ''}`}/>
                                     <div className="texts">
-                                        <span className="nameMessage">{mess.name}</span>
-                                        <p className="pic">
-                                            {mess.mes.includes("https://www.youtube.com/watch") ? (
-                                                <div>
-                                                    <a href={mess.mes} className="link_mes"
-                                                       target="_blank">{mess.mes}</a>
-                                                    <iframe className="iframe_youtube"
-                                                            width="914"
-                                                            height="514"
-                                                            // src={getYoutubeEmbedUrl(mess.mes)}
-                                                            title="Video Player"
-                                                            frameBorder="0"
-                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                                            referrerPolicy="strict-origin-when-cross-origin"
-                                                            allowFullScreen
-                                                    ></iframe>
-                                                </div>
-                                            ) : mess.mes.includes("base64") ? (
-                                                <img src={mess.mes} alt="Received Image"/>
-                                            ) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (
-                                                <img src={mess.mes} alt="Received Image"/>
-                                            ) : (
-                                                <a>{mess.mes}</a>
-                                            )}
-                                        </p>
-                                        <span>{formatDateTime(mess.createAt)}</span>
+                                        {isFirstMessage && <span className="nameMessage">{mess.name}</span>}
+                                        <p>{mess.mes}</p>
+                                        {isLastMessage && <span className="lastMessage">{formatDateTime(mess.createAt)}</span>}
+
                                     </div>
                                 </div>
                             )}
