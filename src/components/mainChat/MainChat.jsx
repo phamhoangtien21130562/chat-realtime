@@ -2,14 +2,7 @@ import '../../assets/style/mainChat.css';
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
-import html2canvas from 'html2canvas';
-
-// Thêm Web Speech API vào đây
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-recognition.lang = 'vi-VN'; // Đặt ngôn ngữ thành tiếng Việt
-recognition.continuous = false;
-recognition.interimResults = false;
+import html2canvas from 'html2canvas'; // Thêm import này
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -48,10 +41,10 @@ const decryptData = (encryptedData) => {
 const storedUsername = localStorage.getItem('username');
 const decryptedUsername = decryptData(storedUsername);
 
-const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
+const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     const [openEmoji, setOpenEmoji] = useState(false);
+    const [emojiToText, setEmojiToText] = useState("");
     const [message, setMessage] = useState("");
-    const [isRecording, setIsRecording] = useState(false);
 
     const endRef = useRef(null);
     useEffect(() => {
@@ -59,7 +52,7 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     }, [chatMess]);
 
     const showEmoji = e => {
-        setMessage(prev => prev + e.emoji);
+        setEmojiToText(prev => prev + e.emoji);
         setOpenEmoji(false);
     };
 
@@ -76,34 +69,12 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     function handleChange(event) {
         setMessage(event.target.value);
     }
-
     function handleClickSend() {
         if (message.trim() !== "") {
             handleSendMessage(message.trim());
             setMessage("");
         }
     }
-
-    const handleMicClick = () => {
-        if (isRecording) {
-            recognition.stop();
-            setIsRecording(false);
-        } else {
-            recognition.start();
-            setIsRecording(true);
-        }
-    };
-
-    recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        setMessage(prevMessage => prevMessage + " " + transcript);
-        setIsRecording(false);
-    };
-
-    recognition.onerror = (event) => {
-        console.error("Error occurred in recognition: ", event.error);
-        setIsRecording(false);
-    };
 
     const handleScreenshotClick = async () => {
         try {
@@ -118,11 +89,13 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
         }
     };
 
+    let prevName = "";
+
     return (
         <div className='mainChat'>
             <div className="topChat">
                 <div className="user">
-                    {userType === 0 ? (<img src="/img/avata.png" alt="" />) : (<img src="/img/avatamuti.png" alt=""/>)}
+                    {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
                     <div className="texts">
                         <span>{groupName}</span>
                     </div>
@@ -134,39 +107,49 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
                 </div>
             </div>
             <div className="centerChat">
-                {sortedChatContent.map((mess, index) => (
-                    <div className="s" key={index}>
-                        {mess.name === decryptedUsername ? (
-                            <div className="messages own">
-                                <div className="texts">
-                                    <p>{mess.mes}</p>
-                                    <span>{formatDateTime(mess.createAt)}</span>
+                {sortedChatContent.map((mess, index) => {
+                    const isSameUser = mess.name === prevName;
+                    const isLastMessage = (index === sortedChatContent.length - 1) || (sortedChatContent[index + 1].name !== mess.name);
+                    const isFirstMessage = !isSameUser;
+                    prevName = mess.name;
+
+                    return (
+                        <div className="s" key={index}>
+                            {mess.name === decryptedUsername ? (
+                                <div className="messages own">
+                                    <div className="texts">
+                                        <p>{mess.mes}</p>
+                                        {isLastMessage && <span>{formatDateTime(mess.createAt)}</span>}
+                                    </div>
                                 </div>
-                            </div>
-                        ) : (
-                            <div className="messages">
-                                <img src="/img/avata.png" alt="" className="avatarImage" />
-                                <div className="texts">
-                                    <span className="nameMessage">{mess.name}</span>
-                                    <p>{mess.mes}</p>
-                                    <span>{formatDateTime(mess.createAt)}</span>
+                            ) : (
+                                <div className="messages">
+                                    <img src="/img/avata.png" alt=""
+                                         className={`avatarImage ${isSameUser ? 'hidden' : ''}`}/>
+                                    <div className="texts">
+                                        {isFirstMessage && <span className="nameMessage">{mess.name}</span>}
+                                        <p>{mess.mes}</p>
+                                        {isLastMessage && <span className="lastMessage">{formatDateTime(mess.createAt)}</span>}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                        <div ref={endRef}></div>
-                    </div>
-                ))}
+                            )}
+                            <div ref={endRef}></div>
+                        </div>
+                    );
+                })}
             </div>
             <div className="bottomChat">
                 <div className="icons">
-                    <img src="/img/img.png" alt="" />
+                    <img src="/img/img.png" alt=""/>
                     <img src="/img/camera.png" alt="" onClick={handleScreenshotClick} />
-                    <img src="/img/mic.png" alt="" onClick={handleMicClick} className={isRecording ? 'recording' : ''} />
+                    <img src="/img/mic.png" alt=""/>
                 </div>
                 <input
                     type="text"
                     placeholder="Write your message here"
+                    value={emojiToText}
                     value={message}
+                    onChange={e => setEmojiToText(e.target.value)}
                     onChange={handleChange}
                     onKeyDown={(event) => {
                         if (event.key === "Enter") {
@@ -181,7 +164,7 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
                         onClick={() => setOpenEmoji((prev) => !prev)}
                     />
                     <div className="emojiPicker">
-                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji} />}
+                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji}/>}
                     </div>
                 </div>
                 <button onClick={handleClickSend} className="sendButton">Send</button>
@@ -190,4 +173,5 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     );
 };
 
+console.log(decryptedUsername);
 export default MainChat;
