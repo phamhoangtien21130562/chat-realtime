@@ -2,7 +2,7 @@ import '../../assets/style/mainChat.css';
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
-import * as events from "events";
+import html2canvas from 'html2canvas';
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -41,11 +41,10 @@ const decryptData = (encryptedData) => {
 const storedUsername = localStorage.getItem('username');
 const decryptedUsername = decryptData(storedUsername);
 
-const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
+const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     const [openEmoji, setOpenEmoji] = useState(false);
     const [emojiToText, setEmojiToText] = useState("");
     const [message, setMessage] = useState("");
-
 
     const endRef = useRef(null);
     useEffect(() => {
@@ -77,14 +76,23 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         }
     }
 
+    const handleCapture = () => {
+        html2canvas(document.body).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'screenshot.png';
+            link.click();
+        });
+    };
+
     return (
         <div className='mainChat'>
             <div className="topChat">
                 <div className="user">
-                    {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
+                    {userType === 0 ? (<img src="/img/avata.png" alt="" />) : (<img src="/img/avatamuti.png" alt=""/>)}
                     <div className="texts">
                         <span>{groupName}</span>
-                        {/*<p>Hello World</p>*/}
                     </div>
                 </div>
                 <div className="icon">
@@ -113,7 +121,6 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                 </div>
                             </div>
                         )}
-
                         <div ref={endRef}></div>
                     </div>
                 ))}
@@ -121,17 +128,18 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
             <div className="bottomChat">
                 <div className="icons">
                     <img src="/img/img.png" alt="" />
-                    <img src="/img/camera.png" alt="" />
+                    <img src="/img/camera.png" alt="" onClick={handleCapture} />
                     <img src="/img/mic.png" alt="" />
                 </div>
                 <input
                     type="text"
                     placeholder="Write your message here"
                     value={emojiToText}
-                    value={message}
-                    onChange={e => setEmojiToText(e.target.value)}
-                    onChange={handleChange}
-                    onKeyDown={(event)=>{
+                    onChange={e => {
+                        setEmojiToText(e.target.value);
+                        handleChange(e);
+                    }}
+                    onKeyDown={(event) => {
                         if (event.key === "Enter") {
                             handleClickSend();
                         }
