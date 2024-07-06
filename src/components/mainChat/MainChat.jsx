@@ -2,6 +2,7 @@ import '../../assets/style/mainChat.css';
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
+import html2canvas from 'html2canvas';
 
 // Thêm Web Speech API vào đây
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -77,6 +78,7 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
         setMessage(event.target.value);
         setEmojiToText(event.target.value); // Cập nhật emojiToText cùng với message
     }
+
     function handleClickSend() {
         if (message.trim() !== "") {
             handleSendMessage(message.trim());
@@ -105,6 +107,19 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     recognition.onerror = (event) => {
         console.error("Error occurred in recognition: ", event.error);
         setIsRecording(false);
+    };
+
+    const handleScreenshotClick = async () => {
+        try {
+            const canvas = await html2canvas(document.body);
+            const imgData = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'screenshot.png';
+            link.click();
+        } catch (error) {
+            console.error('Error taking screenshot:', error);
+        }
     };
 
     return (
@@ -149,7 +164,7 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
             <div className="bottomChat">
                 <div className="icons">
                     <img src="/img/img.png" alt="" />
-                    <img src="/img/camera.png" alt="" />
+                    <img src="/img/camera.png" alt="" onClick={handleScreenshotClick} />
                     <img src="/img/mic.png" alt="" onClick={handleMicClick} className={isRecording ? 'recording' : ''} />
                 </div>
                 <input
