@@ -3,6 +3,7 @@ import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
 import * as events from "events";
+import FacebookPost from "../FacebookPost";
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -77,6 +78,8 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         }
     }
 
+    let prevName = "";
+
     return (
         <div className='mainChat'>
             <div className="topChat">
@@ -84,7 +87,6 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                     {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
                     <div className="texts">
                         <span>{groupName}</span>
-                        {/*<p>Hello World</p>*/}
                     </div>
                 </div>
                 <div className="icon">
@@ -94,35 +96,91 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                 </div>
             </div>
             <div className="centerChat">
-                {sortedChatContent.map((mess, index) => (
-                    <div className="s" key={index}>
-                        {mess.name === decryptedUsername ? (
-                            <div className="messages own">
-                                <div className="texts">
-                                    <p>{mess.mes}</p>
-                                    <span>{formatDateTime(mess.createAt)}</span>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="messages">
-                                <img src="/img/avata.png" alt="" className="avatarImage" />
-                                <div className="texts">
-                                    <span className="nameMessage">{mess.name}</span>
-                                    <p>{mess.mes}</p>
-                                    <span>{formatDateTime(mess.createAt)}</span>
-                                </div>
-                            </div>
-                        )}
+                {sortedChatContent.map((mess, index) => {
+                    const isSameUser = mess.name === prevName;
+                    const isLastMessage = (index === sortedChatContent.length - 1) || (sortedChatContent[index + 1].name !== mess.name);
+                    const isFirstMessage = !isSameUser;
+                    prevName = mess.name;
 
-                        <div ref={endRef}></div>
-                    </div>
-                ))}
+                    return (
+                        <div className="s" key={index}>
+                            {mess.name === decryptedUsername ? (
+                                <div className="messages own">
+                                    <div className="texts">
+                                        {mess.mes.includes("https://www.youtube.com/watch") ? (
+                                            <div>
+                                                <a href={mess.mes} className="link_mes_own" target="_blank">{mess.mes}</a>
+                                                <iframe className="iframe_youtube"
+                                                        width="914"
+                                                        height="514"
+                                                        // src={getYoutubeEmbedUrl(mess.mes)}
+                                                        title="Video Player"
+                                                        frameBorder="0"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                        referrerPolicy="strict-origin-when-cross-origin"
+                                                        allowFullScreen
+                                                ></iframe>
+                                            </div>
+                                        ) : mess.mes.includes("base64") ? (
+                                            <p className="pic_own">
+                                                <img src={mess.mes} alt="Received Image"/>
+                                            </p>
+                                        ) : mess.mes.includes("https://www.facebook.com") ? (
+                                            <FacebookPost href={mess.mes}  type="post" />
+                                        ) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (
+                                            <p className="pic_own">
+                                                <img src={mess.mes} alt="Received Image"/>
+                                            </p>
+                                        ) : (
+                                            <a className="mes">{mess.mes}</a>
+                                        )}
+                                        {isLastMessage && <span>{formatDateTime(mess.createAt)}</span>}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="messages">
+                                    <img src="/img/avata.png" alt=""
+                                         className={`avatarImage ${isSameUser ? 'hidden' : ''}`}/>
+                                    <div className="texts">
+                                        <span className="nameMessage">{mess.name}</span>
+                                        <p className="pic">
+                                            {mess.mes.includes("https://www.youtube.com/watch") ? (
+                                                <div>
+                                                    <a href={mess.mes} className="link_mes"
+                                                       target="_blank">{mess.mes}</a>
+                                                    <iframe className="iframe_youtube"
+                                                            width="914"
+                                                            height="514"
+                                                            // src={getYoutubeEmbedUrl(mess.mes)}
+                                                            title="Video Player"
+                                                            frameBorder="0"
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                            referrerPolicy="strict-origin-when-cross-origin"
+                                                            allowFullScreen
+                                                    ></iframe>
+                                                </div>
+                                            ) : mess.mes.includes("base64") ? (
+                                                <img src={mess.mes} alt="Received Image"/>
+                                            ) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (
+                                                <img src={mess.mes} alt="Received Image"/>
+                                            ) : (
+                                                <a>{mess.mes}</a>
+                                            )}
+                                        </p>
+                                        <span>{formatDateTime(mess.createAt)}</span>
+                                    </div>
+                                </div>
+                            )}
+                            <div ref={endRef}></div>
+                        </div>
+                    );
+                })}
             </div>
             <div className="bottomChat">
                 <div className="icons">
-                    <img src="/img/img.png" alt="" />
-                    <img src="/img/camera.png" alt="" />
-                    <img src="/img/mic.png" alt="" />
+                    <img src="/img/img.png" alt=""/>
+                    <img src="/img/camera.png" alt=""/>
+                    <img src="/img/mic.png" alt=""/>
                 </div>
                 <input
                     type="text"
@@ -131,7 +189,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                     value={message}
                     onChange={e => setEmojiToText(e.target.value)}
                     onChange={handleChange}
-                    onKeyDown={(event)=>{
+                    onKeyDown={(event) => {
                         if (event.key === "Enter") {
                             handleClickSend();
                         }
@@ -144,7 +202,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                         onClick={() => setOpenEmoji((prev) => !prev)}
                     />
                     <div className="emojiPicker">
-                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji} />}
+                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji}/>}
                     </div>
                 </div>
                 <button onClick={handleClickSend} className="sendButton">Send</button>
