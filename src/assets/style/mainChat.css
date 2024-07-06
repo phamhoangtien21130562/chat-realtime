@@ -181,3 +181,22 @@
 /*    display: block;*/
 /*    margin-top: 10px; !* Tùy chỉnh giá trị này để tạo khoảng cách *!*/
 /*}*/
+/* Các CSS khác */
+.message-group {
+    margin-bottom: 10px; /* Tạo khoảng cách nhỏ giữa các nhóm tin nhắn */
+}
+.message-group {
+    margin-bottom: 10px; /* Tạo khoảng cách nhỏ giữa các nhóm tin nhắn */
+}
+/* Các thẻ <p> trong mỗi tin nhắn */
+.mainChat .centerChat .message-group .messages p {
+    margin-bottom: 5px; /* Thay đổi số liệu này tùy theo khoảng cách mong muốn */
+}
+
+/* Nhóm tin nhắn */
+.mainChat .centerChat .message-group {
+    margin-bottom: 15px; /* Thay đổi số liệu này tùy theo khoảng cách mong muốn */
+}
+
+
+

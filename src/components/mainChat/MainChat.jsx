@@ -41,11 +41,10 @@ const decryptData = (encryptedData) => {
 const storedUsername = localStorage.getItem('username');
 const decryptedUsername = decryptData(storedUsername);
 
-const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
+const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     const [openEmoji, setOpenEmoji] = useState(false);
     const [emojiToText, setEmojiToText] = useState("");
     const [message, setMessage] = useState("");
-
 
     const endRef = useRef(null);
     useEffect(() => {
@@ -67,9 +66,20 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         return timeA - timeB;
     });
 
+    const groupedMessages = sortedChatContent.reduce((acc, message) => {
+        const lastGroup = acc[acc.length - 1];
+        if (lastGroup && lastGroup[0].name === message.name) {
+            lastGroup.push(message);
+        } else {
+            acc.push([message]);
+        }
+        return acc;
+    }, []);
+
     function handleChange(event) {
         setMessage(event.target.value);
     }
+
     function handleClickSend() {
         if (message.trim() !== "") {
             handleSendMessage(message.trim());
@@ -81,10 +91,9 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         <div className='mainChat'>
             <div className="topChat">
                 <div className="user">
-                    {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
+                    {userType === 0 ? (<img src="/img/avata.png" alt="" />) : (<img src="/img/avatamuti.png" alt="" />)}
                     <div className="texts">
                         <span>{groupName}</span>
-                        {/*<p>Hello World</p>*/}
                     </div>
                 </div>
                 <div className="icon">
@@ -94,35 +103,37 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                 </div>
             </div>
             <div className="centerChat">
-                {sortedChatContent.map((mess, index) => (
-                    <div className="s" key={index}>
-                        {mess.name === decryptedUsername ? (
-                            <div className="messages own">
-                                <div className="texts">
-                                    <p>{mess.mes}</p>
-                                    <span>{formatDateTime(mess.createAt)}</span>
+                {groupedMessages.map((group, groupIndex) => (
+                    <div className="message-group" key={groupIndex}>
+                        {group.map((mess, index) => (
+                            <div className="s" key={index}>
+                                <div className={mess.name === decryptedUsername ? "messages own" : "messages"}>
+                                    {index === 0 && mess.name !== decryptedUsername && (
+                                        <img src="/img/avata.png" alt="" className="avatarImage"/>
+                                    )}
+                                    <div className="texts">
+                                        {index === 0 && mess.name !== decryptedUsername && (
+                                            <span className="nameMessage">{mess.name}</span>
+                                        )}
+                                        <div className="message-content">
+                                            <p>{mess.mes}</p>
+                                        </div>
+                                        {index === group.length - 1 && (
+                                            <span className="timestamp">{formatDateTime(mess.createAt)}</span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        ) : (
-                            <div className="messages">
-                                <img src="/img/avata.png" alt="" className="avatarImage" />
-                                <div className="texts">
-                                    <span className="nameMessage">{mess.name}</span>
-                                    <p>{mess.mes}</p>
-                                    <span>{formatDateTime(mess.createAt)}</span>
-                                </div>
-                            </div>
-                        )}
-
-                        <div ref={endRef}></div>
+                        ))}
                     </div>
                 ))}
+                <div ref={endRef}></div>
             </div>
             <div className="bottomChat">
                 <div className="icons">
-                    <img src="/img/img.png" alt="" />
-                    <img src="/img/camera.png" alt="" />
-                    <img src="/img/mic.png" alt="" />
+                    <img src="/img/img.png" alt=""/>
+                    <img src="/img/camera.png" alt=""/>
+                    <img src="/img/mic.png" alt=""/>
                 </div>
                 <input
                     type="text"
@@ -131,7 +142,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                     value={message}
                     onChange={e => setEmojiToText(e.target.value)}
                     onChange={handleChange}
-                    onKeyDown={(event)=>{
+                    onKeyDown={(event) => {
                         if (event.key === "Enter") {
                             handleClickSend();
                         }
@@ -152,5 +163,6 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         </div>
     );
 };
+
 console.log(decryptedUsername);
 export default MainChat;
