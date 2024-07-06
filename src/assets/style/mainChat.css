@@ -72,6 +72,7 @@
     max-width: 70%;
     display: flex;
     gap: 20px;
+    margin-bottom: -16px;
 }
 
 .mainChat .centerChat .messages img{
@@ -197,6 +198,8 @@
 .mainChat .centerChat .message-group {
     margin-bottom: 15px; /* Thay đổi số liệu này tùy theo khoảng cách mong muốn */
 }
-
+.avatarImage.hidden {
+    visibility: hidden;
+}
 
 

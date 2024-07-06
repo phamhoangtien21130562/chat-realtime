@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
 import * as events from "events";
 
+
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
     dateTime.setHours(dateTime.getHours() + 7);
@@ -41,10 +42,11 @@ const decryptData = (encryptedData) => {
 const storedUsername = localStorage.getItem('username');
 const decryptedUsername = decryptData(storedUsername);
 
-const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
+const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     const [openEmoji, setOpenEmoji] = useState(false);
     const [emojiToText, setEmojiToText] = useState("");
     const [message, setMessage] = useState("");
+
 
     const endRef = useRef(null);
     useEffect(() => {
@@ -66,20 +68,9 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
         return timeA - timeB;
     });
 
-    const groupedMessages = sortedChatContent.reduce((acc, message) => {
-        const lastGroup = acc[acc.length - 1];
-        if (lastGroup && lastGroup[0].name === message.name) {
-            lastGroup.push(message);
-        } else {
-            acc.push([message]);
-        }
-        return acc;
-    }, []);
-
     function handleChange(event) {
         setMessage(event.target.value);
     }
-
     function handleClickSend() {
         if (message.trim() !== "") {
             handleSendMessage(message.trim());
@@ -87,11 +78,13 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
         }
     }
 
+    let prevName = "";
+
     return (
         <div className='mainChat'>
             <div className="topChat">
                 <div className="user">
-                    {userType === 0 ? (<img src="/img/avata.png" alt="" />) : (<img src="/img/avatamuti.png" alt="" />)}
+                    {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
                     <div className="texts">
                         <span>{groupName}</span>
                     </div>
@@ -103,31 +96,63 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
                 </div>
             </div>
             <div className="centerChat">
-                {groupedMessages.map((group, groupIndex) => (
-                    <div className="message-group" key={groupIndex}>
-                        {group.map((mess, index) => (
-                            <div className="s" key={index}>
-                                <div className={mess.name === decryptedUsername ? "messages own" : "messages"}>
-                                    {index === 0 && mess.name !== decryptedUsername && (
-                                        <img src="/img/avata.png" alt="" className="avatarImage"/>
-                                    )}
+                {sortedChatContent.map((mess, index) => {
+                    const isSameUser = mess.name === prevName;
+                    const isLastMessage = (index === sortedChatContent.length - 1) || (sortedChatContent[index + 1].name !== mess.name);
+                    const isFirstMessage = !isSameUser;
+                    prevName = mess.name;
+
+                    return (
+                        <div className="s" key={index}>
+                            {mess.name === decryptedUsername ? (
+                                <div className="messages own">
                                     <div className="texts">
-                                        {index === 0 && mess.name !== decryptedUsername && (
-                                            <span className="nameMessage">{mess.name}</span>
-                                        )}
-                                        <div className="message-content">
-                                            <p>{mess.mes}</p>
-                                        </div>
-                                        {index === group.length - 1 && (
-                                            <span className="timestamp">{formatDateTime(mess.createAt)}</span>
-                                        )}
+                                        <p>{mess.mes}</p>
+                                        {/*{mess.mes.includes("https://www.youtube.com/watch") ? (*/}
+                                        {/*    <div>*/}
+                                        {/*        <a href={mess.mes} className="link_mes_own" target="_blank">{mess.mes}</a>*/}
+                                        {/*        <iframe className="iframe_youtube"*/}
+                                        {/*                width="914"*/}
+                                        {/*                height="514"*/}
+                                        {/*                // src={getYoutubeEmbedUrl(mess.mes)}*/}
+                                        {/*                title="Video Player"*/}
+                                        {/*                frameBorder="0"*/}
+                                        {/*                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"*/}
+                                        {/*                referrerPolicy="strict-origin-when-cross-origin"*/}
+                                        {/*                allowFullScreen*/}
+                                        {/*        ></iframe>*/}
+                                        {/*    </div>*/}
+                                        {/*) : mess.mes.includes("base64") ? (*/}
+                                        {/*    <p className="pic_own">*/}
+                                        {/*        <img src={mess.mes} alt="Received Image"/>*/}
+                                        {/*    </p>*/}
+                                        {/*) : mess.mes.includes("https://www.facebook.com") ? (*/}
+                                        {/*    <FacebookPost href={mess.mes}  type="post" />*/}
+                                        {/*) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (*/}
+                                        {/*    <p className="pic_own">*/}
+                                        {/*        <img src={mess.mes} alt="Received Image"/>*/}
+                                        {/*    </p>*/}
+                                        {/*) : (*/}
+                                        {/*    <a className="mes">{mess.mes}</a>*/}
+                                        {/*)}*/}
+                                        {isLastMessage && <span>{formatDateTime(mess.createAt)}</span>}
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                ))}
-                <div ref={endRef}></div>
+                            ) : (
+                                <div className="messages">
+                                    <img src="/img/avata.png" alt=""
+                                         className={`avatarImage ${isSameUser ? 'hidden' : ''}`}/>
+                                    <div className="texts">
+                                        {isFirstMessage && <span className="nameMessage">{mess.name}</span>}
+                                        <p>{mess.mes}</p>
+                                        {isLastMessage && <span>{formatDateTime(mess.createAt)}</span>}
+                                    </div>
+                                </div>
+                            )}
+                            <div ref={endRef}></div>
+                        </div>
+                    );
+                })}
             </div>
             <div className="bottomChat">
                 <div className="icons">
@@ -155,7 +180,7 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
                         onClick={() => setOpenEmoji((prev) => !prev)}
                     />
                     <div className="emojiPicker">
-                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji} />}
+                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji}/>}
                     </div>
                 </div>
                 <button onClick={handleClickSend} className="sendButton">Send</button>
@@ -163,6 +188,5 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
         </div>
     );
 };
-
 console.log(decryptedUsername);
 export default MainChat;
