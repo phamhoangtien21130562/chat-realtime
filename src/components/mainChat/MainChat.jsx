@@ -2,7 +2,13 @@ import '../../assets/style/mainChat.css';
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
-import html2canvas from 'html2canvas';
+
+// Thêm Web Speech API vào đây
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.lang = 'vi-VN'; // Đặt ngôn ngữ thành tiếng Việt
+recognition.continuous = false;
+recognition.interimResults = false;
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -45,6 +51,7 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     const [openEmoji, setOpenEmoji] = useState(false);
     const [emojiToText, setEmojiToText] = useState("");
     const [message, setMessage] = useState("");
+    const [isRecording, setIsRecording] = useState(false);
 
     const endRef = useRef(null);
     useEffect(() => {
@@ -76,14 +83,25 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
         }
     }
 
-    const handleCapture = () => {
-        html2canvas(document.body).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = imgData;
-            link.download = 'screenshot.png';
-            link.click();
-        });
+    const handleMicClick = () => {
+        if (isRecording) {
+            recognition.stop();
+            setIsRecording(false);
+        } else {
+            recognition.start();
+            setIsRecording(true);
+        }
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setMessage(prevMessage => prevMessage + " " + transcript);
+        setIsRecording(false);
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Error occurred in recognition: ", event.error);
+        setIsRecording(false);
     };
 
     return (
@@ -128,8 +146,8 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
             <div className="bottomChat">
                 <div className="icons">
                     <img src="/img/img.png" alt="" />
-                    <img src="/img/camera.png" alt="" onClick={handleCapture} />
-                    <img src="/img/mic.png" alt="" />
+                    <img src="/img/camera.png" alt="" />
+                    <img src="/img/mic.png" alt="" onClick={handleMicClick} className={isRecording ? 'recording' : ''} />
                 </div>
                 <input
                     type="text"
@@ -160,5 +178,5 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
         </div>
     );
 };
-console.log(decryptedUsername);
+
 export default MainChat;
