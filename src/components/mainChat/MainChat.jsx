@@ -145,7 +145,8 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                     <div className="texts">
                                         {isFirstMessage && <span className="nameMessage">{mess.name}</span>}
                                         <p>{mess.mes}</p>
-                                        {isLastMessage && <span>{formatDateTime(mess.createAt)}</span>}
+                                        {isLastMessage && <span className="lastMessage">{formatDateTime(mess.createAt)}</span>}
+
                                     </div>
                                 </div>
                             )}

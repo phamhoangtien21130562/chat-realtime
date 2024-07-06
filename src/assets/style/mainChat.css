@@ -72,7 +72,7 @@
     max-width: 70%;
     display: flex;
     gap: 20px;
-    margin-bottom: -16px;
+    margin-bottom: -15px;
 }
 
 .mainChat .centerChat .messages img{
@@ -200,6 +200,9 @@
 }
 .avatarImage.hidden {
     visibility: hidden;
+}
+.mainChat .centerChat .messages .texts span.lastMessage {
+    padding-bottom: 20px; /* Điều chỉnh padding-bottom theo ý muốn */
 }
 
 
