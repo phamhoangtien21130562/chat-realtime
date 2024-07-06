@@ -2,8 +2,7 @@ import '../../assets/style/mainChat.css';
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
-import * as events from "events";
-
+import html2canvas from 'html2canvas';
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -42,11 +41,9 @@ const decryptData = (encryptedData) => {
 const storedUsername = localStorage.getItem('username');
 const decryptedUsername = decryptData(storedUsername);
 
-const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
+const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     const [openEmoji, setOpenEmoji] = useState(false);
-    const [emojiToText, setEmojiToText] = useState("");
     const [message, setMessage] = useState("");
-
 
     const endRef = useRef(null);
     useEffect(() => {
@@ -54,7 +51,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     }, [chatMess]);
 
     const showEmoji = e => {
-        setEmojiToText(prev => prev + e.emoji);
+        setMessage(prev => prev + e.emoji);
         setOpenEmoji(false);
     };
 
@@ -71,6 +68,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     function handleChange(event) {
         setMessage(event.target.value);
     }
+
     function handleClickSend() {
         if (message.trim() !== "") {
             handleSendMessage(message.trim());
@@ -78,13 +76,45 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         }
     }
 
+    const handleScreenshotClick = async () => {
+        try {
+            const canvas = await html2canvas(document.body);
+            const imgData = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'screenshot.png';
+            link.click();
+        } catch (error) {
+            console.error('Error taking screenshot:', error);
+        }
+    };
+
+    const handleMicClick = () => {
+        const recognition = new window.webkitSpeechRecognition();
+        recognition.lang = 'vi-VN';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            setMessage(prevMessage => prevMessage + transcript);
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error", event.error);
+        };
+
+        recognition.start();
+    };
+
     let prevName = "";
 
     return (
         <div className='mainChat'>
             <div className="topChat">
                 <div className="user">
-                    {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
+                    {userType === 0 ? (<img src="/img/avata.png" alt="" />) : (<img src="/img/avatamuti.png" alt="" />)}
                     <div className="texts">
                         <span>{groupName}</span>
                     </div>
@@ -108,45 +138,17 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                 <div className="messages own">
                                     <div className="texts">
                                         <p>{mess.mes}</p>
-                                        {/*{mess.mes.includes("https://www.youtube.com/watch") ? (*/}
-                                        {/*    <div>*/}
-                                        {/*        <a href={mess.mes} className="link_mes_own" target="_blank">{mess.mes}</a>*/}
-                                        {/*        <iframe className="iframe_youtube"*/}
-                                        {/*                width="914"*/}
-                                        {/*                height="514"*/}
-                                        {/*                // src={getYoutubeEmbedUrl(mess.mes)}*/}
-                                        {/*                title="Video Player"*/}
-                                        {/*                frameBorder="0"*/}
-                                        {/*                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"*/}
-                                        {/*                referrerPolicy="strict-origin-when-cross-origin"*/}
-                                        {/*                allowFullScreen*/}
-                                        {/*        ></iframe>*/}
-                                        {/*    </div>*/}
-                                        {/*) : mess.mes.includes("base64") ? (*/}
-                                        {/*    <p className="pic_own">*/}
-                                        {/*        <img src={mess.mes} alt="Received Image"/>*/}
-                                        {/*    </p>*/}
-                                        {/*) : mess.mes.includes("https://www.facebook.com") ? (*/}
-                                        {/*    <FacebookPost href={mess.mes}  type="post" />*/}
-                                        {/*) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (*/}
-                                        {/*    <p className="pic_own">*/}
-                                        {/*        <img src={mess.mes} alt="Received Image"/>*/}
-                                        {/*    </p>*/}
-                                        {/*) : (*/}
-                                        {/*    <a className="mes">{mess.mes}</a>*/}
-                                        {/*)}*/}
                                         {isLastMessage && <span>{formatDateTime(mess.createAt)}</span>}
                                     </div>
                                 </div>
                             ) : (
                                 <div className="messages">
                                     <img src="/img/avata.png" alt=""
-                                         className={`avatarImage ${isSameUser ? 'hidden' : ''}`}/>
+                                         className={`avatarImage ${isSameUser ? 'hidden' : ''}`} />
                                     <div className="texts">
                                         {isFirstMessage && <span className="nameMessage">{mess.name}</span>}
                                         <p>{mess.mes}</p>
                                         {isLastMessage && <span className="lastMessage">{formatDateTime(mess.createAt)}</span>}
-
                                     </div>
                                 </div>
                             )}
@@ -157,16 +159,14 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
             </div>
             <div className="bottomChat">
                 <div className="icons">
-                    <img src="/img/img.png" alt=""/>
-                    <img src="/img/camera.png" alt=""/>
-                    <img src="/img/mic.png" alt=""/>
+                    <img src="/img/img.png" alt="" />
+                    <img src="/img/camera.png" alt="" onClick={handleScreenshotClick} />
+                    <img src="/img/mic.png" alt="" onClick={handleMicClick} />
                 </div>
                 <input
                     type="text"
                     placeholder="Write your message here"
-                    value={emojiToText}
                     value={message}
-                    onChange={e => setEmojiToText(e.target.value)}
                     onChange={handleChange}
                     onKeyDown={(event) => {
                         if (event.key === "Enter") {
@@ -181,7 +181,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                         onClick={() => setOpenEmoji((prev) => !prev)}
                     />
                     <div className="emojiPicker">
-                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji}/>}
+                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji} />}
                     </div>
                 </div>
                 <button onClick={handleClickSend} className="sendButton">Send</button>
@@ -189,5 +189,6 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         </div>
     );
 };
+
 console.log(decryptedUsername);
 export default MainChat;
