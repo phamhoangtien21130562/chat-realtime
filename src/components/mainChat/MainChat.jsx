@@ -2,6 +2,7 @@ import '../../assets/style/mainChat.css';
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
+import html2canvas from 'html2canvas';
 import * as events from "events";
 import FacebookPost from "../FacebookPost";
 
@@ -55,7 +56,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     }, [chatMess]);
 
     const showEmoji = e => {
-        setEmojiToText(prev => prev + e.emoji);
+        setMessage(prev => prev + e.emoji);
         setOpenEmoji(false);
     };
 
@@ -79,6 +80,38 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         }
     }
 
+    const handleScreenshotClick = async () => {
+        try {
+            const canvas = await html2canvas(document.body);
+            const imgData = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'screenshot.png';
+            link.click();
+        } catch (error) {
+            console.error('Error taking screenshot:', error);
+        }
+    };
+
+    const handleMicClick = () => {
+        const recognition = new window.webkitSpeechRecognition();
+        recognition.lang = 'vi-VN';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            setMessage(prevMessage => prevMessage + transcript);
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error", event.error);
+        };
+
+        recognition.start();
+    };
+
     let prevName = "";
 
     return (
@@ -88,7 +121,6 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                     {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
                     <div className="texts">
                         <span>{groupName}</span>
-                        {/*<p>Hello World</p>*/}
                     </div>
                 </div>
                 <div className="icon">
@@ -159,16 +191,14 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
             </div>
             <div className="bottomChat">
                 <div className="icons">
-                    <img src="/img/img.png" alt=""/>
-                    <img src="/img/camera.png" alt=""/>
-                    <img src="/img/mic.png" alt=""/>
+                    <img src="/img/img.png" alt="" />
+                    <img src="/img/camera.png" alt="" onClick={handleScreenshotClick} />
+                    <img src="/img/mic.png" alt="" onClick={handleMicClick} />
                 </div>
                 <input
                     type="text"
                     placeholder="Write your message here"
-                    value={emojiToText}
                     value={message}
-                    onChange={e => setEmojiToText(e.target.value)}
                     onChange={handleChange}
                     onKeyDown={(event) => {
                         if (event.key === "Enter") {
