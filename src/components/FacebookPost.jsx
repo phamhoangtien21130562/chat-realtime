@@ -1,41 +1,40 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-const FacebookEmbed = ({ href, width = 500, type = 'post' }) => {
+const FacebookEmbed = ({ href, width = '500' }) => {
+    const iframeRef = useRef(null);
+    const [height, setHeight] = useState('auto');
+
     useEffect(() => {
-        // Load Facebook SDK
-        if (window.FB) {
-            window.FB.XFBML.parse();
-        } else {
-            ((d, s, id) => {
-                let js,
-                    fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s);
-                js.id = id;
-                js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v10.0';
-                fjs.parentNode.insertBefore(js, fjs);
-            })(document, 'script', 'facebook-jssdk');
-        }
+        const handleMessage = (event) => {
+            if (event.origin === 'https://www.facebook.com') {
+                const data = event.data;
+                if (data.height && iframeRef.current) {
+                    setHeight(data.height + 'px');
+                }
+            }
+        };
+
+        window.addEventListener('message', handleMessage);
+
+        return () => {
+            window.removeEventListener('message', handleMessage);
+        };
     }, []);
 
-    const renderEmbed = () => {
-        switch (type) {
-            case 'post':
-                return <div className="fb-post" data-href={href} data-width={width}></div>;
-            case 'video':
-                return <div className="fb-video" data-href={href} data-width={width} data-allowfullscreen="true"></div>;
-            case 'photo':
-                return <div className="fb-photo" data-href={href} data-width={width}></div>;
-            default:
-                return null;
-        }
-    };
+    const iframeSrc = `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(href)}&width=${width}`;
 
     return (
-        <div>
-            <div id="fb-root"></div>
-            {renderEmbed()}
-        </div>
+        <iframe
+            ref={iframeRef}
+            src={iframeSrc}
+            width={width}
+            height={height}
+            style={{ border: 'none', overflow: 'hidden' }}
+            scrolling="no"
+            frameBorder="0"
+            allow="encrypted-media"
+            allowFullScreen={true}
+        ></iframe>
     );
 };
 
