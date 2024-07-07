@@ -167,10 +167,6 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                                         allowFullScreen
                                                 ></iframe>
                                             </div>
-                                        ) : mess.mes.includes("base64") ? (
-                                            <p className="pic_own">
-                                                <img src={mess.mes} alt="Received Image"/>
-                                            </p>
                                         ) : mess.mes.includes("https://www.facebook.com") ? (
                                             <div className="facebook">
                                                 <a className="mes_facebook_own" href={mess.mes} target="_blank">{mess.mes}</a>
@@ -179,10 +175,6 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                                     width="486"
                                                 />
                                             </div>
-                                        ) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (
-                                            <p className="pic_own">
-                                                <img src={mess.mes} alt="Received Image"/>
-                                            </p>
                                         ) : (
                                             <a className="mes">{mess.mes}</a>
                                         )}
@@ -220,10 +212,6 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                                         height="400"
                                                     />
                                                 </div>
-                                            ) : mess.mes.includes("base64") ? (
-                                                <img src={mess.mes} alt="Received Image"/>
-                                            ) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (
-                                                <img src={mess.mes} alt="Received Image"/>
                                             ) : (
                                                 <a>{mess.mes}</a>
                                             )}
