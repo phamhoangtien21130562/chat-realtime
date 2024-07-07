@@ -80,6 +80,10 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     }
 
     const handleScreenshotClick = async () => {
+        const noscriptElements = document.getElementsByTagName('noscript');
+        Array.from(noscriptElements).forEach(noscript => {
+            noscript.style.display = 'none';
+        });
 
         try {
             const canvas = await html2canvas(document.body);
