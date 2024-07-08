@@ -10,6 +10,7 @@
     gap: 20px;
 }
 .userInfo .user img{
+    background-color: white;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -27,8 +28,8 @@
 /* userInfo.css */
 
 .logoutButton {
-    background-color: #008000; /* Màu nền */
-    color: white; /* Màu chữ */
+    background-color: #ece1e1; /* Màu nền */
+    color: #f56c6c; /* Màu chữ */
     border: none; /* Không có viền */
     padding: 10px 20px; /* Kích thước nút */
     text-align: center; /* Căn giữa nội dung */
@@ -38,8 +39,10 @@
     cursor: pointer; /* Con trỏ chuột khi rê vào */
     border-radius: 5px; /* Bo tròn góc */
     transition: background-color 0.3s ease; /* Hiệu ứng chuyển đổi màu nền */
+    border: 1px solid #f56c6c;
 }
 
 .logoutButton:hover {
-    background-color: #df362c; /* Màu nền khi di chuột vào */
+    background-color: #f56c6c; /* Màu nền khi di chuột vào */
+    color: white;
 }

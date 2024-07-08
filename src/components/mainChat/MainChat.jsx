@@ -3,6 +3,8 @@ import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
 import html2canvas from 'html2canvas';
+import * as events from "events";
+import FacebookEmbed from "../FacebookPost";
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -41,9 +43,11 @@ const decryptData = (encryptedData) => {
 const storedUsername = localStorage.getItem('username');
 const decryptedUsername = decryptData(storedUsername);
 
-const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
+const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     const [openEmoji, setOpenEmoji] = useState(false);
+    const [emojiToText, setEmojiToText] = useState("");
     const [message, setMessage] = useState("");
+
 
     const endRef = useRef(null);
     useEffect(() => {
@@ -68,7 +72,6 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     function handleChange(event) {
         setMessage(event.target.value);
     }
-
     function handleClickSend() {
         if (message.trim() !== "") {
             handleSendMessage(message.trim());
@@ -77,6 +80,11 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
     }
 
     const handleScreenshotClick = async () => {
+        const noscriptElements = document.getElementsByTagName('noscript');
+        Array.from(noscriptElements).forEach(noscript => {
+            noscript.style.display = 'none';
+        });
+
         try {
             const canvas = await html2canvas(document.body);
             const imgData = canvas.toDataURL('image/png');
@@ -110,11 +118,18 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
 
     let prevName = "";
 
+    const getYoutubeEmbedUrl = (url) => {
+        const match = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+    };
+
+
+
     return (
         <div className='mainChat'>
             <div className="topChat">
                 <div className="user">
-                    {userType === 0 ? (<img src="/img/avata.png" alt="" />) : (<img src="/img/avatamuti.png" alt="" />)}
+                    {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
                     <div className="texts">
                         <span>{groupName}</span>
                     </div>
@@ -137,18 +152,74 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
                             {mess.name === decryptedUsername ? (
                                 <div className="messages own">
                                     <div className="texts">
-                                        <p>{mess.mes}</p>
+                                        {/*<p>{mess.mes}</p>*/}
+                                        {mess.mes.includes("https://www.youtube.com/watch") ? (
+                                            <div className="youtube_own">
+                                                <a href={mess.mes} className="link_mes_own" target="_blank">{mess.mes}</a>
+                                                <iframe className="iframe_youtube"
+                                                        width="914"
+                                                        height="514"
+                                                        src={getYoutubeEmbedUrl(mess.mes)}
+                                                        title="Video Player"
+                                                        frameBorder="0"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                        referrerPolicy="strict-origin-when-cross-origin"
+                                                        allowFullScreen
+                                                ></iframe>
+                                            </div>
+                                        ) : mess.mes.includes("https://www.facebook.com") ? (
+                                            <div className="facebook">
+                                                <a className="mes_facebook_own" href={mess.mes} target="_blank">{mess.mes}</a>
+                                                <FacebookEmbed
+                                                    href={mess.mes}
+                                                    width="486"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <a className="mes">{mess.mes}</a>
+                                        )}
                                         {isLastMessage && <span>{formatDateTime(mess.createAt)}</span>}
                                     </div>
                                 </div>
                             ) : (
                                 <div className="messages">
                                     <img src="/img/avata.png" alt=""
-                                         className={`avatarImage ${isSameUser ? 'hidden' : ''}`} />
+                                         className={`avatarImage ${isSameUser ? 'hidden' : ''}`}/>
                                     <div className="texts">
                                         {isFirstMessage && <span className="nameMessage">{mess.name}</span>}
-                                        <p>{mess.mes}</p>
-                                        {isLastMessage && <span className="lastMessage">{formatDateTime(mess.createAt)}</span>}
+                                        <p className="pic">
+                                            {mess.mes.includes("https://www.youtube.com/watch") ? (
+                                                <div className="youtube">
+                                                    <a href={mess.mes} className="link_mes"
+                                                       target="_blank">{mess.mes}</a>
+                                                    <iframe className="iframe_youtube"
+                                                            width="914"
+                                                            height="514"
+                                                            src={getYoutubeEmbedUrl(mess.mes)}
+                                                            title="Video Player"
+                                                            frameBorder="0"
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                            referrerPolicy="strict-origin-when-cross-origin"
+                                                            allowFullScreen
+                                                    ></iframe>
+                                                </div>
+                                            ) : mess.mes.includes("https://www.facebook.com") ? (
+                                                <div className="facebook">
+                                                    <a className="mes_facebook" href={mess.mes} target="_blank">{mess.mes}</a>
+                                                    <FacebookEmbed
+                                                        href={mess.mes}
+                                                        width="520"
+                                                        height="400"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <a>{mess.mes}</a>
+                                            )}
+                                        </p>
+
+                                        {isLastMessage &&
+                                            <span className="lastMessage">{formatDateTime(mess.createAt)}</span>}
+
                                     </div>
                                 </div>
                             )}
@@ -159,9 +230,9 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
             </div>
             <div className="bottomChat">
                 <div className="icons">
-                    <img src="/img/img.png" alt="" />
-                    <img src="/img/camera.png" alt="" onClick={handleScreenshotClick} />
-                    <img src="/img/mic.png" alt="" onClick={handleMicClick} />
+                    <img src="/img/img.png" alt=""/>
+                    <img src="/img/camera.png" alt="" onClick={handleScreenshotClick}/>
+                    <img src="/img/mic.png" alt="" onClick={handleMicClick}/>
                 </div>
                 <input
                     type="text"
@@ -181,7 +252,7 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
                         onClick={() => setOpenEmoji((prev) => !prev)}
                     />
                     <div className="emojiPicker">
-                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji} />}
+                        {openEmoji && <EmojiPicker onEmojiClick={showEmoji}/>}
                     </div>
                 </div>
                 <button onClick={handleClickSend} className="sendButton">Send</button>
@@ -189,6 +260,5 @@ const MainChat = ({ chatMess, groupName, userType, handleSendMessage }) => {
         </div>
     );
 };
-
 console.log(decryptedUsername);
 export default MainChat;

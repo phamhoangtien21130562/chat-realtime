@@ -66,6 +66,7 @@
     border-bottom: 1px solid #655d72;
 }
 .chatList .items img{
+    background-color: #ffffff;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -96,10 +97,14 @@
 
 
 }
+.items:first-child{
+    margin-top: 5px;
+}
 .items.selected {
-    border: 2px solid #2E8B57; /* Viền nổi bật */
-    border-radius: 5px; /* Bo góc viền */
-    cursor: pointer; /* Con trỏ khi rê chuột */
+    background-color: rgb(226 200 200 / 50%);
+    border: 2px solid #b1c0b8;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 
