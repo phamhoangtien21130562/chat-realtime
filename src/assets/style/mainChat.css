@@ -252,7 +252,7 @@
     visibility: hidden;
 }
 .mainChat .centerChat .messages .texts span.lastMessage {
-    padding-bottom: 20px; /* Điều chỉnh padding-bottom theo ý muốn */
+    padding-bottom: 20px;
 }
 /*.face{*/
 /*    height: 100%;*/
