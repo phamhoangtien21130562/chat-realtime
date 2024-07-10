@@ -61,11 +61,11 @@ const UserInfo = () => {
                 <img src="/img/avata.png" alt=""/>
                 <h2>{decodedUsername}</h2>
             </div>
-            <div className="icons">
-                <img src="/img/more.png" alt=""/>
-                <img src="/img/video.png" alt=""/>
-                <img src="/img/edit.png" alt=""/>
-            </div>
+            {/*<div className="icons">*/}
+            {/*    <img src="/img/more.png" alt=""/>*/}
+            {/*    <img src="/img/video.png" alt=""/>*/}
+            {/*    <img src="/img/edit.png" alt=""/>*/}
+            {/*</div>*/}
             <div className="icons">
                 {/* Nút đăng xuất */}
                 <button onClick={handleLogout} className="logoutButton">Logout</button>
