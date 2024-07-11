@@ -6,6 +6,9 @@ import html2canvas from 'html2canvas';
 import * as events from "events";
 import FacebookEmbed from "../FacebookPost";
 import pica from "pica";
+import Cloudinary from "../Cloudinary";
+import cloudinary from "../Cloudinary";
+import GifSelector from "./GifSelector";
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -48,6 +51,8 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     const [openEmoji, setOpenEmoji] = useState(false);
     const [emojiToText, setEmojiToText] = useState("");
     const [message, setMessage] = useState("");
+    const [showGifSelector, setShowGifSelector] = useState(false);
+    const [selectedGif, setSelectedGif] = useState(null);
 
 
     const endRef = useRef(null);
@@ -124,67 +129,36 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         return match ? `https://www.youtube.com/embed/${match[1]}` : url;
     };
 
-
-    //nén dữ liệu thành 22kb
-    const MAX_IMAGE_SIZE = 22 * 1024;
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
 
-        // Tạo một canvas mới để nén ảnh
-        const image = new Image();
-        image.src = URL.createObjectURL(file);
-        image.onload = async function () {
-            const canvas = document.createElement('canvas');
-            const targetSize = calculateTargetSize(image, MAX_IMAGE_SIZE);
+        try {
+            const uploadPhoto = await cloudinary(file);
 
-            canvas.width = targetSize.width;
-            canvas.height = targetSize.height;
-
-            const resizeOptions = {
-                quality: 3, // Chất lượng nén, số càng cao thì chất lượng càng tốt nhưng file càng lớn
-            };
-
-            try {
-                const resizedCanvas = await resizeImage(image, canvas, resizeOptions);
-                const base64Image = resizedCanvas.toDataURL('image/jpeg');
-                handleSendMessage(base64Image);
-            } catch (error) {
-                console.error("Lỗi khi nén ảnh: ", error);
+            if (!uploadPhoto) {
+                throw new Error('Error: uploadPhoto is null or undefined');
             }
-        };
-    };
 
-    //tính toán dữ liệu
-    const calculateTargetSize = (image, maxSize) => {
-        const aspectRatio = image.width / image.height;
-        let targetWidth = Math.sqrt(maxSize * aspectRatio);
-        let targetHeight = targetWidth / aspectRatio;
+            console.log('Upload Photo:', uploadPhoto);
 
-        if (targetWidth > image.width || targetHeight > image.height) {
-            targetWidth = image.width;
-            targetHeight = image.height;
+            if (!uploadPhoto.secure_url) {
+                throw new Error('Error: secure_url is undefined');
+            }
+
+            const imageUrl = uploadPhoto.secure_url;
+            handleSendMessage(imageUrl);
+        } catch (error) {
+            console.error('Error during image upload:', error);
         }
-
-        return { width: targetWidth, height: targetHeight };
     };
 
-    //nén ảnh
-    const resizeImage = (image, canvas, options) => {
-        const { quality } = options;
-        const picaInstance = pica();
-
-        return new Promise((resolve, reject) => {
-            picaInstance.resize(image, canvas, options)
-                .then(result => {
-                    resolve(result);
-                })
-                .catch(error => {
-                    reject(error);
-                });
-        });
+    const handleGifSelect = (gifUrl) => {
+        setSelectedGif(gifUrl);
+        setShowGifSelector(false);
+        console.log(gifUrl);
+        handleSendMessage(gifUrl);
     };
-
 
     return (
         <div className='mainChat'>
@@ -228,6 +202,10 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                                         allowFullScreen
                                                 ></iframe>
                                             </div>
+                                        ) : mess.mes.includes("gif") ? (
+                                            <p className="pic_own">
+                                                <img src={mess.mes} alt="Received Image"/>
+                                            </p>
                                         ) : mess.mes.includes("base64") ? (
                                             <p className="pic_own">
                                                 <img src={mess.mes} alt="Received Image"/>
@@ -244,6 +222,10 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                             <p className="pic_own">
                                                 <img src={mess.mes} alt="Received Image"/>
                                             </p>
+                                        ) : mess.mes.includes("mp4") ? (
+                                            <video  controls className="video_own">
+                                                <source src={mess.mes}/>
+                                            </video>
                                         ) : (
                                             <a className="mes">{mess.mes}</a>
                                         )}
@@ -281,10 +263,16 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                                         height="400"
                                                     />
                                                 </div>
+                                            ) : mess.mes.includes("gif") ? (
+                                                <img src={mess.mes} alt="Received Image"/>
                                             ) : mess.mes.includes("base64") ? (
                                                 <img src={mess.mes} alt="Received Image"/>
                                             ) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (
                                                 <img src={mess.mes} alt="Received Image"/>
+                                            ) : mess.mes.includes("mp4") ? (
+                                                <video  controls className="video">
+                                                    <source src={mess.mes}/>
+                                                </video>
                                             ) : (
                                                 <a>{mess.mes}</a>
                                             )}
@@ -311,7 +299,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                     <input
                         id="image-upload"
                         type="file"
-                        accept="image/*"
+                        // accept="image/*"
                         style={{display: "none"}}
                         onChange={handleImageUpload}
                     />
@@ -340,6 +328,17 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                         {openEmoji && <EmojiPicker onEmojiClick={showEmoji}/>}
                     </div>
                 </div>
+                <div className="emoji">
+                    <img
+                        src="/img/face.png"
+                        alt=""
+                        onClick={() => setShowGifSelector((prev) => !prev)}
+                    />
+                    <div className="emojiPicker">
+                        {showGifSelector && <GifSelector onSelect={handleGifSelect} />}
+                    </div>
+                </div>
+
                 <button onClick={handleClickSend} className="sendButton">Send</button>
             </div>
         </div>
