@@ -8,6 +8,7 @@ import FacebookEmbed from "../FacebookPost";
 import pica from "pica";
 import Cloudinary from "../Cloudinary";
 import cloudinary from "../Cloudinary";
+import GifSelector from "./GifSelector";
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -50,6 +51,8 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     const [openEmoji, setOpenEmoji] = useState(false);
     const [emojiToText, setEmojiToText] = useState("");
     const [message, setMessage] = useState("");
+    const [showGifSelector, setShowGifSelector] = useState(false);
+    const [selectedGif, setSelectedGif] = useState(null);
 
 
     const endRef = useRef(null);
@@ -150,6 +153,12 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         }
     };
 
+    const handleGifSelect = (gifUrl) => {
+        setSelectedGif(gifUrl);
+        setShowGifSelector(false);
+        console.log(gifUrl);
+        handleSendMessage(gifUrl);
+    };
 
     return (
         <div className='mainChat'>
@@ -193,6 +202,10 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                                         allowFullScreen
                                                 ></iframe>
                                             </div>
+                                        ) : mess.mes.includes("gif") ? (
+                                            <p className="pic_own">
+                                                <img src={mess.mes} alt="Received Image"/>
+                                            </p>
                                         ) : mess.mes.includes("base64") ? (
                                             <p className="pic_own">
                                                 <img src={mess.mes} alt="Received Image"/>
@@ -250,6 +263,8 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                                         height="400"
                                                     />
                                                 </div>
+                                            ) : mess.mes.includes("gif") ? (
+                                                <img src={mess.mes} alt="Received Image"/>
                                             ) : mess.mes.includes("base64") ? (
                                                 <img src={mess.mes} alt="Received Image"/>
                                             ) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (
@@ -304,7 +319,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                     }}
                 />
                 <div className="emoji">
-                <img
+                    <img
                         src="/img/emoji.png"
                         alt=""
                         onClick={() => setOpenEmoji((prev) => !prev)}
@@ -313,6 +328,17 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                         {openEmoji && <EmojiPicker onEmojiClick={showEmoji}/>}
                     </div>
                 </div>
+                <div className="emoji">
+                    <img
+                        src="/img/face.png"
+                        alt=""
+                        onClick={() => setShowGifSelector(true)}
+                    />
+                    <div className="emojiPicker">
+                        {showGifSelector && <GifSelector onSelect={handleGifSelect} />}
+                    </div>
+                </div>
+
                 <button onClick={handleClickSend} className="sendButton">Send</button>
             </div>
         </div>
