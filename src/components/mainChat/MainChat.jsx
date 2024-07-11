@@ -6,6 +6,8 @@ import html2canvas from 'html2canvas';
 import * as events from "events";
 import FacebookEmbed from "../FacebookPost";
 import pica from "pica";
+import Cloudinary from "../Cloudinary";
+import cloudinary from "../Cloudinary";
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -124,65 +126,28 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         return match ? `https://www.youtube.com/embed/${match[1]}` : url;
     };
 
-
-    //nén dữ liệu thành 22kb
-    const MAX_IMAGE_SIZE = 22 * 1024;
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
 
-        // Tạo một canvas mới để nén ảnh
-        const image = new Image();
-        image.src = URL.createObjectURL(file);
-        image.onload = async function () {
-            const canvas = document.createElement('canvas');
-            const targetSize = calculateTargetSize(image, MAX_IMAGE_SIZE);
+        try {
+            const uploadPhoto = await cloudinary(file);
 
-            canvas.width = targetSize.width;
-            canvas.height = targetSize.height;
-
-            const resizeOptions = {
-                quality: 3, // Chất lượng nén, số càng cao thì chất lượng càng tốt nhưng file càng lớn
-            };
-
-            try {
-                const resizedCanvas = await resizeImage(image, canvas, resizeOptions);
-                const base64Image = resizedCanvas.toDataURL('image/jpeg');
-                handleSendMessage(base64Image);
-            } catch (error) {
-                console.error("Lỗi khi nén ảnh: ", error);
+            if (!uploadPhoto) {
+                throw new Error('Error: uploadPhoto is null or undefined');
             }
-        };
-    };
 
-    //tính toán dữ liệu
-    const calculateTargetSize = (image, maxSize) => {
-        const aspectRatio = image.width / image.height;
-        let targetWidth = Math.sqrt(maxSize * aspectRatio);
-        let targetHeight = targetWidth / aspectRatio;
+            console.log('Upload Photo:', uploadPhoto);
 
-        if (targetWidth > image.width || targetHeight > image.height) {
-            targetWidth = image.width;
-            targetHeight = image.height;
+            if (!uploadPhoto.secure_url) {
+                throw new Error('Error: secure_url is undefined');
+            }
+
+            const imageUrl = uploadPhoto.secure_url;
+            handleSendMessage(imageUrl);
+        } catch (error) {
+            console.error('Error during image upload:', error);
         }
-
-        return { width: targetWidth, height: targetHeight };
-    };
-
-    //nén ảnh
-    const resizeImage = (image, canvas, options) => {
-        const { quality } = options;
-        const picaInstance = pica();
-
-        return new Promise((resolve, reject) => {
-            picaInstance.resize(image, canvas, options)
-                .then(result => {
-                    resolve(result);
-                })
-                .catch(error => {
-                    reject(error);
-                });
-        });
     };
 
 
