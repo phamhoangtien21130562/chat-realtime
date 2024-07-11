@@ -332,7 +332,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                     <img
                         src="/img/face.png"
                         alt=""
-                        onClick={() => setShowGifSelector(true)}
+                        onClick={() => setShowGifSelector((prev) => !prev)}
                     />
                     <div className="emojiPicker">
                         {showGifSelector && <GifSelector onSelect={handleGifSelect} />}
