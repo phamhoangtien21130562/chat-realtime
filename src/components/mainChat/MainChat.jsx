@@ -209,6 +209,10 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                             <p className="pic_own">
                                                 <img src={mess.mes} alt="Received Image"/>
                                             </p>
+                                        ) : mess.mes.includes("mp4") ? (
+                                            <video  controls className="video_own">
+                                                <source src={mess.mes}/>
+                                            </video>
                                         ) : (
                                             <a className="mes">{mess.mes}</a>
                                         )}
@@ -250,6 +254,10 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                                 <img src={mess.mes} alt="Received Image"/>
                                             ) : (mess.mes.includes("jpg") || mess.mes.includes("png") || mess.mes.includes("jpeg") || mess.mes.includes("image")) ? (
                                                 <img src={mess.mes} alt="Received Image"/>
+                                            ) : mess.mes.includes("mp4") ? (
+                                                <video  controls className="video">
+                                                    <source src={mess.mes}/>
+                                                </video>
                                             ) : (
                                                 <a>{mess.mes}</a>
                                             )}
@@ -276,7 +284,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                     <input
                         id="image-upload"
                         type="file"
-                        accept="image/*"
+                        // accept="image/*"
                         style={{display: "none"}}
                         onChange={handleImageUpload}
                     />
