@@ -35,6 +35,7 @@ const LoginForm = () => {
     const [passwordTouched, setPasswordTouched] = useState(false);
     const [notification, setNotification] = useState('');
     const [loginSuccess, setLoginSuccess] = useState(false);
+    const [error, setError] = useState(false);
 
 
     const navigate = useNavigate();
@@ -83,7 +84,7 @@ const LoginForm = () => {
                     localStorage.setItem('re_login_code', responseData.data["RE_LOGIN_CODE"]);
                     setNotification('Đăng nhập thành công!');
                     setLoginSuccess(true);
-
+                    setError(false)
                     setTimeout(() => {
                         navigate('/homepage');
                     }, 1000);
@@ -91,6 +92,7 @@ const LoginForm = () => {
                 } else {
                     console.log('Sai tên đăng nhập hoặc mật khẩu');
                     setNotification('Sai tên đăng nhập hoặc mật khẩu!');
+                    setError(true)
                 }
             };
         }
@@ -174,7 +176,7 @@ const LoginForm = () => {
                     </div>
                 </form>
                 {notification && (
-                    <div className="alert">{notification}</div>
+                    <div className={`alert ${error == true ? 'error':''}`}>{notification}</div>
                 )}
             </div>
         </div>

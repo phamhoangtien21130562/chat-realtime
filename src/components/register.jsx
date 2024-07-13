@@ -7,6 +7,7 @@ const RegisterForm = () => {
     const [socket, setSocket] = useState(null);
     const [usernameTouched, setUsernameTouched] = useState(false);
     const [passwordTouched, setPasswordTouched] = useState(false);
+    const [error, setError] = useState(false);
     const [notification, setNotification] = useState('');
 
     useEffect(() => {
@@ -43,8 +44,10 @@ const RegisterForm = () => {
                 if (responseData && responseData.status === "success") {
                     // Đăng kí thành công
                     setNotification('Đăng ký thành công!');
+                    setError(false)
                 } else {
                     setNotification('Tài khoản đã tồn tại!');
+                    setError(true)
                 }
             };
         }
@@ -103,7 +106,7 @@ const RegisterForm = () => {
                     </div>
                 </form>
                 {notification && (
-                    <div className="alert">{notification}</div>
+                    <div className={`alert ${error==true ? 'error':''}`}>{notification}</div>
                 )}
             </div>
         </div>

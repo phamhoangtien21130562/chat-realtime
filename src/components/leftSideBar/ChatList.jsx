@@ -3,6 +3,7 @@ import '../../assets/style/chatList.css';
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
+    dateTime.setHours(dateTime.getHours() + 7);
     const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
     const timeOptions = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
 
