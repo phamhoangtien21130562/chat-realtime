@@ -21,6 +21,17 @@ const formatDateTime = (dateTimeString) => {
 
     return `${datePart} ${timePart}`;
 };
+const formatDateTime2 = (dateTimeString) => {
+    const dateTime = dateTimeString ? new Date(dateTimeString) : new Date();
+    const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
+
+    const datePart = dateTime.toLocaleDateString(undefined, dateOptions);
+    const timePart = dateTime.toLocaleTimeString(undefined, timeOptions);
+
+    return `${datePart} ${timePart}`;
+};
+
 
 const key = CryptoJS.enc.Utf8.parse('1234567891234567');
 const iv = CryptoJS.enc.Utf8.parse('vector khởi tạo');
@@ -279,7 +290,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                                         </p>
 
                                         {isLastMessage &&
-                                            <span className="lastMessage">{formatDateTime(mess.createAt)}</span>}
+                                            <span className="lastMessage">{formatDateTime2(mess.createAt)}</span>}
 
                                     </div>
                                 </div>
