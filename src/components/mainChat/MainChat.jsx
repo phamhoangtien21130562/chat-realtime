@@ -125,7 +125,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
 
     const handleFireworksClick = () => {
         setShowFireworks(true);
-        setTimeout(() => setShowFireworks(false), 3000); // Stop fireworks after 3 seconds
+        setTimeout(() => setShowFireworks(false), 5000); // Stop fireworks after 3 seconds
     };
 
     let prevName = "";
@@ -359,7 +359,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                 </div>
                 <div className="emoji">
                     <img
-                        src="/img/firework.png"
+                        src="/logo192.png"
                         alt=""
                         onClick={handleFireworksClick}
                     />
