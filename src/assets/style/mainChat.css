@@ -321,19 +321,14 @@
     transform: scale(1.1);
 }
 .fireworksButton {
-    margin-left: 10px;
-    padding: 10px;
-    background-color: #ff5733;
-    color: white;
+    background: none;
     border: none;
-    border-radius: 5px;
+    font-size: 24px;
     cursor: pointer;
+    margin-left: 10px;
+    padding: 0;
 }
 
-.fireworksButton:hover {
-    background-color: #e74c3c;
-}
-
-
-
-
+/*.fireworksButton:hover {*/
+/*    color: #ff5733; !* Thay đổi màu sắc khi hover *!*/
+/*}*/

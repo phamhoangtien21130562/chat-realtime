@@ -357,7 +357,13 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                         {showGifSelector && <GifSelector onSelect={handleGifSelect}/>}
                     </div>
                 </div>
-                <button onClick={handleFireworksClick} className="fireworksButton">Fireworks</button>
+                <div className="emoji">
+                    <img
+                        src="/img/firework.png"
+                        alt=""
+                        onClick={handleFireworksClick}
+                    />
+                </div>
                 <button onClick={handleClickSend} className="sendButton">Send</button>
             </div>
         </div>
