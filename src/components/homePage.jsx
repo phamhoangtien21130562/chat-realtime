@@ -8,6 +8,7 @@ import ChatList from "./leftSideBar/ChatList";
 import SearchBox from "./leftSideBar/searchBox";
 import '../assets/style/leftSideBar.css';
 import CryptoJS from 'crypto-js';
+import CustomDialog from './CustomDialog';
 
 const key = CryptoJS.enc.Utf8.parse('1234567891234567');
 const iv = CryptoJS.enc.Utf8.parse('vector khởi tạo');
@@ -34,6 +35,9 @@ const HomePage = () => {
     const [isChatVisible, setIsChatVisible] = useState(true);
     const [typeSend, setTypeSend] = useState(null);
     const [listUserChatRoom, setListUserChatRoom] = useState([]);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogMessage, setDialogMessage] = useState('');
+    const [dialogTitle, setDialogTitle] = useState('');
 
     function handleUserClick(userName, type) {
         setSelectedUser(userName);
@@ -217,14 +221,18 @@ const HomePage = () => {
                     console.log(receivedRoomName);
                 }
                 if (response.status === 'error' && response.event === 'CREATE_ROOM') {
-                    alert(response.mes);
+                    setDialogTitle('Lỗi');
+                    setDialogMessage(response.mes);
+                    setDialogOpen(true);
                 }
                 if (response.status === 'success' && response.event === 'JOIN_ROOM') {
                     const receivedRoomName = response.data;
                     console.log(receivedRoomName);
                 }
                 if (response.status === 'error' && response.event === 'JOIN_ROOM') {
-                    alert(response.mes);
+                    setDialogTitle('Lỗi');
+                    setDialogMessage(response.mes);
+                    setDialogOpen(true);
                 }
                 if (response.status === 'success' && response.event === 'GET_USER_LIST') {
                     console.log('Danh sách người dùng:', response.data);
@@ -286,6 +294,10 @@ const HomePage = () => {
         };
     }, []);
 
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+    };
+
     return (
         <div className="App">
             <div className='leftSideBar'>
@@ -318,11 +330,14 @@ const HomePage = () => {
                         <i className="fas fa-comment"></i>
                     </div>
                 </div>
-
-
             )}
             <MainChat/>
-
+            <CustomDialog
+                open={dialogOpen}
+                onClose={handleCloseDialog}
+                title={dialogTitle}
+                message={dialogMessage}
+            />
         </div>
     );
 };

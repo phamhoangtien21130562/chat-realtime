@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {FaEye, FaEyeSlash} from 'react-icons/fa';
 import '../assets/style/register.css'
 
 const RegisterForm = () => {
@@ -7,6 +8,8 @@ const RegisterForm = () => {
     const [socket, setSocket] = useState(null);
     const [usernameTouched, setUsernameTouched] = useState(false);
     const [passwordTouched, setPasswordTouched] = useState(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [error, setError] = useState(false);
     const [notification, setNotification] = useState('');
 
     useEffect(() => {
@@ -43,8 +46,10 @@ const RegisterForm = () => {
                 if (responseData && responseData.status === "success") {
                     // Đăng kí thành công
                     setNotification('Đăng ký thành công!');
+                    setError(false)
                 } else {
                     setNotification('Tài khoản đã tồn tại!');
+                    setError(true)
                 }
             };
         }
@@ -82,7 +87,7 @@ const RegisterForm = () => {
                                onBlur={handleUserBlur}
                                name="hoten"/>
                     </div>
-                    <div className="pass_Input">
+                    <div className="pass_Input" style={{position: 'relative'}}>
                         <div className="label_pass">
                             <label style={{marginLeft: '0px'}}> Password:</label>
                             {passwordTouched && password.trim() === '' && (
@@ -91,11 +96,34 @@ const RegisterForm = () => {
                         </div>
                         <input value={password}
                                className="input_write input_pass"
-                               type="password"
+                               type={isPasswordVisible ? 'text' : 'password'}
                                placeholder="Mật khẩu"
                                onChange={(e) => setPassword(e.target.value)}
                                onBlur={handlePassBlur}
                                name="pass"/>
+                        {isPasswordVisible ? (
+                            <FaEyeSlash
+                                style={{
+                                    position: 'absolute',
+                                    right: '10px',
+                                    top: '69%',
+                                    transform: 'translateY(-50%)',
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() => setIsPasswordVisible(false)}
+                            />
+                        ) : (
+                            <FaEye
+                                style={{
+                                    position: 'absolute',
+                                    right: '10px',
+                                    top: '69%',
+                                    transform: 'translateY(-50%)',
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() => setIsPasswordVisible(true)}
+                            />
+                        )}
                     </div>
                     <input id="submit" type="submit" name="submit" value="Đăng kí"/>
                     <div className="login_ref">
@@ -103,7 +131,7 @@ const RegisterForm = () => {
                     </div>
                 </form>
                 {notification && (
-                    <div className="alert">{notification}</div>
+                    <div className={`alert ${error == true ? 'error' : ''}`}>{notification}</div>
                 )}
             </div>
         </div>

@@ -137,3 +137,6 @@ input#submit{
     padding: 15px;
     border-radius: 10px;
 }
+.error{
+    background-color: #e8516b;
+}

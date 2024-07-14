@@ -39,6 +39,13 @@ body{
     margin: 20px 20px;
 }
 
+.title{
+    background-color: #f56c6c;
+}
+.dialog_mesage{
+    padding-top: 30px;
+}
+
 
 
 
