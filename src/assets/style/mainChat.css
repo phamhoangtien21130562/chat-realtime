@@ -332,3 +332,9 @@
 /*.fireworksButton:hover {*/
 /*    color: #ff5733; !* Thay đổi màu sắc khi hover *!*/
 /*}*/
+.mainChat .centerChat .own .texts .facebook{
+    width: inherit;
+}
+.scale-main{
+    width: inherit;
+}
