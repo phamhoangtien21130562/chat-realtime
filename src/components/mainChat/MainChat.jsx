@@ -1,6 +1,7 @@
+import React, { useEffect, useRef, useState } from "react";
+import { Fireworks } from '@fireworks-js/react';
 import '../../assets/style/mainChat.css';
 import EmojiPicker from "emoji-picker-react";
-import React, { useEffect, useRef, useState } from "react";
 import CryptoJS from "crypto-js";
 import html2canvas from 'html2canvas';
 import * as events from "events";
@@ -53,7 +54,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     const [message, setMessage] = useState("");
     const [showGifSelector, setShowGifSelector] = useState(false);
     const [selectedGif, setSelectedGif] = useState(null);
-
+    const [showFireworks, setShowFireworks] = useState(false);
 
     const endRef = useRef(null);
     useEffect(() => {
@@ -122,6 +123,11 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         recognition.start();
     };
 
+    const handleFireworksClick = () => {
+        setShowFireworks(true);
+        setTimeout(() => setShowFireworks(false), 3000); // Stop fireworks after 3 seconds
+    };
+
     let prevName = "";
 
     const getYoutubeEmbedUrl = (url) => {
@@ -162,6 +168,21 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
 
     return (
         <div className='mainChat'>
+            {showFireworks && (
+                <Fireworks
+                    options={{
+                        rocketsPoint: { min: 0, max: 100 }
+                    }}
+                    style={{
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        position: 'fixed',
+                        background: 'transparent'
+                    }}
+                />
+            )}
             <div className="topChat">
                 <div className="user">
                     {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
@@ -187,7 +208,6 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                             {mess.name === decryptedUsername ? (
                                 <div className="messages own">
                                     <div className="texts">
-                                        {/*<p>{mess.mes}</p>*/}
                                         {mess.mes.includes("https://www.youtube.com/watch") ? (
                                             <div className="youtube_own">
                                                 <a href={mess.mes} className="link_mes_own" target="_blank">{mess.mes}</a>
@@ -299,7 +319,6 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                     <input
                         id="image-upload"
                         type="file"
-                        // accept="image/*"
                         style={{display: "none"}}
                         onChange={handleImageUpload}
                     />
@@ -335,14 +354,14 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                         onClick={() => setShowGifSelector((prev) => !prev)}
                     />
                     <div className="emojiPicker">
-                        {showGifSelector && <GifSelector onSelect={handleGifSelect} />}
+                        {showGifSelector && <GifSelector onSelect={handleGifSelect}/>}
                     </div>
                 </div>
-
+                <button onClick={handleFireworksClick} className="fireworksButton">Fireworks</button>
                 <button onClick={handleClickSend} className="sendButton">Send</button>
             </div>
         </div>
     );
 };
-console.log(decryptedUsername);
+
 export default MainChat;
