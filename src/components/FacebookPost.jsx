@@ -24,7 +24,7 @@ const FacebookEmbed = ({ href, width = '500' }) => {
     const iframeSrc = `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(href)}&width=${width}`;
 
     return (
-        <iframe
+        <iframe className="scale-main"
             ref={iframeRef}
             src={iframeSrc}
             width={width}

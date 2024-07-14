@@ -320,7 +320,21 @@
 .gif-selector img:hover {
     transform: scale(1.1);
 }
+.fireworksButton {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 0;
+}
 
-
-
-
+/*.fireworksButton:hover {*/
+/*    color: #ff5733; !* Thay đổi màu sắc khi hover *!*/
+/*}*/
+.mainChat .centerChat .own .texts .facebook{
+    width: inherit;
+}
+.scale-main{
+    width: inherit;
+}
