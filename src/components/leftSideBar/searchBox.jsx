@@ -76,7 +76,7 @@ const SearchBox = ({ handleCreateRoom, handleJoinRoom, usersList, setUsersList }
                     />
                 </div>
                 <img src={"/img/plus.png"} onClick={CreateRoomClick} alt="" className="add"/>
-                <img src={"/img/arrowRight.png"} onClick={JoinRoomClick} alt="" className="add"/>
+                <img src={"/img/greater.png"} onClick={JoinRoomClick} alt="" className="add"/>
             </div>
         </div>
     );

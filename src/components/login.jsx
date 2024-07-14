@@ -3,6 +3,7 @@ import '../assets/style/login.css';
 import { useNavigate } from 'react-router-dom';
 import withoutAuth from './withoutAuth';
 import CryptoJS from 'crypto-js';
+import {FaEye, FaEyeSlash} from "react-icons/fa";
 
 const key = CryptoJS.enc.Utf8.parse('1234567891234567');
 const iv = CryptoJS.enc.Utf8.parse('vector khởi tạo');
@@ -33,8 +34,10 @@ const LoginForm = () => {
     const [socket, setSocket] = useState(null);
     const [usernameTouched, setUsernameTouched] = useState(false);
     const [passwordTouched, setPasswordTouched] = useState(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [notification, setNotification] = useState('');
     const [loginSuccess, setLoginSuccess] = useState(false);
+    const [error, setError] = useState(false);
 
 
     const navigate = useNavigate();
@@ -83,7 +86,7 @@ const LoginForm = () => {
                     localStorage.setItem('re_login_code', responseData.data["RE_LOGIN_CODE"]);
                     setNotification('Đăng nhập thành công!');
                     setLoginSuccess(true);
-
+                    setError(false)
                     setTimeout(() => {
                         navigate('/homepage');
                     }, 1000);
@@ -91,6 +94,7 @@ const LoginForm = () => {
                 } else {
                     console.log('Sai tên đăng nhập hoặc mật khẩu');
                     setNotification('Sai tên đăng nhập hoặc mật khẩu!');
+                    setError(true)
                 }
             };
         }
@@ -152,7 +156,7 @@ const LoginForm = () => {
                                name="hoten"
                         />
                     </div>
-                    <div className="pass_Input">
+                    <div className="pass_Input" style={{position: 'relative'}}>
                         <div className="label_pass">
                             <label style={{marginLeft: '0px'}}> Password:</label>
                             {passwordTouched && password.trim() === '' && (
@@ -160,13 +164,36 @@ const LoginForm = () => {
                             )}
                         </div>
                         <input value={password}
-                               className="input_pass input_write"
-                               type="password"
+                               className="input_write input_pass"
+                               type={isPasswordVisible ? 'text' : 'password'}
                                placeholder="Mật khẩu"
                                onChange={(e) => setPassword(e.target.value)}
                                onBlur={handlePassBlur}
                                name="pass"
                         />
+                        {isPasswordVisible ? (
+                            <FaEyeSlash
+                                style={{
+                                    position: 'absolute',
+                                    right: '10px',
+                                    top: '69%',
+                                    transform: 'translateY(-50%)',
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() => setIsPasswordVisible(false)}
+                            />
+                        ) : (
+                            <FaEye
+                                style={{
+                                    position: 'absolute',
+                                    right: '10px',
+                                    top: '69%',
+                                    transform: 'translateY(-50%)',
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() => setIsPasswordVisible(true)}
+                            />
+                        )}
                     </div>
                     <input id="submit" type="submit" name="submit" value="Đăng nhập"/>
                     <div className="login_ref">
@@ -174,7 +201,7 @@ const LoginForm = () => {
                     </div>
                 </form>
                 {notification && (
-                    <div className="alert">{notification}</div>
+                    <div className={`alert ${error == true ? 'error' : ''}`}>{notification}</div>
                 )}
             </div>
         </div>
