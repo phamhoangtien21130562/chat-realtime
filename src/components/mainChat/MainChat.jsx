@@ -10,6 +10,7 @@ import pica from "pica";
 import Cloudinary from "../Cloudinary";
 import cloudinary from "../Cloudinary";
 import GifSelector from "./GifSelector";
+import Confetti from 'react-confetti';
 
 const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -66,6 +67,7 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
     const [showGifSelector, setShowGifSelector] = useState(false);
     const [selectedGif, setSelectedGif] = useState(null);
     const [showFireworks, setShowFireworks] = useState(false);
+    const [isConfetti, setIsConfetti] = useState(false);
 
     const endRef = useRef(null);
     useEffect(() => {
@@ -138,6 +140,10 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
         setShowFireworks(true);
         setTimeout(() => setShowFireworks(false), 5000); // Stop fireworks after 3 seconds
     };
+    const handleConfettiClick = () => {
+        setIsConfetti(true);
+        setTimeout(() => setIsConfetti(false), 5000); // Thả giấy trong 3 giây
+    };
 
     let prevName = "";
 
@@ -190,10 +196,18 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                         width: '100%',
                         height: '100%',
                         position: 'fixed',
-                        background: 'transparent'
+                        background: 'rgba(0, 0, 0, 0.5)'
                     }}
                 />
             )}
+            {isConfetti && <Confetti style={{
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                position: 'fixed',
+                background: 'rgba(0, 0, 0, 0.5)'
+            }}/>}
             <div className="topChat">
                 <div className="user">
                     {userType === 0 ? (<img src="/img/avata.png" alt="" />): (<img src="/img/avatamuti.png" alt=""/>)}
@@ -373,6 +387,13 @@ const MainChat = ({chatMess,groupName, userType, handleSendMessage}) => {
                         src="/logo192.png"
                         alt=""
                         onClick={handleFireworksClick}
+                    />
+                </div>
+                <div className="emoji">
+                    <img
+                        src="/img/happyi.png"
+                        alt=""
+                        onClick={handleConfettiClick}
                     />
                 </div>
                 <button onClick={handleClickSend} className="sendButton">Send</button>
